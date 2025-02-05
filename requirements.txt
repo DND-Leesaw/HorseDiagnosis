@@ -5,8 +5,4 @@ pandas
 numpy
 joblib
 werkzeug
-logging
-shutil
-datetime
-json
 redis
