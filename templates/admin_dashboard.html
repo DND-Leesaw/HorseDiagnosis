@@ -257,28 +257,27 @@
 </div>
 
 <!-- Upload Model Modal -->
-<div class="modal fade" id="uploadModelModal" tabindex="-1">
+<div class="modal fade" id="uploadModelModal" tabindex="-1" aria-labelledby="uploadModelModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">อัพโหลดโมเดลใหม่</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title" id="uploadModelModalLabel">อัพโหลดโมเดลใหม่</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{{ url_for('admin_dashboard') }}" 
-                      enctype="multipart/form-data">
+                <form method="POST" action="{{ url_for('admin_dashboard') }}" enctype="multipart/form-data">
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="action" value="add_model">
                     
                     <div class="mb-3">
-                        <label class="form-label">เลือกไฟล์โมเดล</label>
-                        <input type="file" class="form-control" name="model_file" 
+                        <label for="model_file" class="form-label">เลือกไฟล์โมเดล</label>
+                        <input type="file" class="form-control" id="model_file" name="model_file" 
                                accept=".joblib,.pkl" required>
+                        <div class="form-text">รองรับไฟล์นามสกุล .joblib และ .pkl เท่านั้น</div>
                     </div>
                     
                     <div class="text-end">
-                        <button type="button" class="btn btn-secondary me-2" 
-                                data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">ยกเลิก</button>
                         <button type="submit" class="btn btn-primary">อัพโหลด</button>
                     </div>
                 </form>
