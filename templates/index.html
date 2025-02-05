@@ -1,0 +1,244 @@
+<!-- templates/index.html -->
+{% extends "layout.html" %}
+
+{% block title %}ระบบวินิจฉัยโรคม้า{% endblock %}
+
+{% block content %}
+<div class="container my-5 fade-in">
+    <!-- หัวข้อหลัก -->
+    <h1 class="text-center">
+        <i class="fas fa-horse-head"></i>
+        ระบบวินิจฉัยโรคม้าเบื้องต้น
+    </h1>
+
+    <form method="POST" action="{{ url_for('diagnose') }}">
+        <!-- ข้อมูลพื้นฐาน -->
+        <div class="card">
+            <div class="card-header">
+                <h3 class="mb-0">
+                    <i class="fas fa-info-circle"></i>
+                    ข้อมูลพื้นฐาน
+                </h3>
+            </div>
+            <div class="card-body">
+                <!-- เพศ -->
+                <div class="mb-4">
+                    <label class="form-label">เพศ</label>
+                    <div class="input-grid">
+                        <input type="radio" class="btn-check" name="gender" id="male" value="เพศผู้" required>
+                        <label class="btn btn-outline-primary" for="male">
+                            <i class="fas fa-mars"></i>เพศผู้
+                        </label>
+
+                        <input type="radio" class="btn-check" name="gender" id="female" value="เพศเมีย" required>
+                        <label class="btn btn-outline-primary" for="female">
+                            <i class="fas fa-venus"></i>เพศเมีย
+                        </label>
+
+                        <input type="radio" class="btn-check" name="gender" id="neutered" value="เพศผู้ตอน" required>
+                        <label class="btn btn-outline-primary" for="neutered">
+                            <i class="fas fa-genderless"></i>เพศผู้ตอน
+                        </label>
+                    </div>
+                </div>
+
+                <!-- ช่วงอายุ -->
+                <div class="mb-4">
+                    <label class="form-label">ช่วงอายุ</label>
+                    <div class="input-grid">
+                        <input type="radio" class="btn-check" name="age" id="foal" value="ลูกม้า" required>
+                        <label class="btn btn-outline-info" for="foal">
+                            <i class="fas fa-baby"></i>ลูกม้า
+                        </label>
+
+                        <input type="radio" class="btn-check" name="age" id="young" value="ม้าหนุ่มสาว" required>
+                        <label class="btn btn-outline-info" for="young">
+                            <i class="fas fa-horse"></i>ม้าหนุ่มสาว
+                        </label>
+
+                        <input type="radio" class="btn-check" name="age" id="adult" value="ม้าโต" required>
+                        <label class="btn btn-outline-info" for="adult">
+                            <i class="fas fa-horse-head"></i>ม้าโต
+                        </label>
+                    </div>
+                </div>
+
+                <!-- พฤติกรรมและสภาพแวดล้อม -->
+                <div class="row">
+                    <!-- พฤติกรรม -->
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">พฤติกรรม</label>
+                        <div class="d-grid gap-2">
+                            <input type="radio" class="btn-check" name="behavior" id="normal" value="ปกติ" required>
+                            <label class="btn btn-outline-success" for="normal">
+                                <i class="fas fa-check"></i>ปกติ
+                            </label>
+
+                            <input type="radio" class="btn-check" name="behavior" id="lethargic" value="ซึม" required>
+                            <label class="btn btn-outline-success" for="lethargic">
+                                <i class="fas fa-bed"></i>ซึม
+                            </label>
+
+                            <input type="radio" class="btn-check" name="behavior" id="low-appetite" value="กินน้อย" required>
+                            <label class="btn btn-outline-success" for="low-appetite">
+                                <i class="fas fa-utensils"></i>กินน้อย
+                            </label>
+
+                            <input type="radio" class="btn-check" name="behavior" id="restless" value="กระสับกระส่าย" required>
+                            <label class="btn btn-outline-success" for="restless">
+                                <i class="fas fa-running"></i>กระสับกระส่าย
+                            </label>
+
+                            <input type="radio" class="btn-check" name="behavior" id="aggressive" value="ก้าวร้าว" required>
+                            <label class="btn btn-outline-success" for="aggressive">
+                                <i class="fas fa-exclamation-triangle"></i>ก้าวร้าว
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- สภาพแวดล้อม -->
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label">สภาพแวดล้อม</label>
+                        <div class="d-grid gap-2">
+                            <input type="radio" class="btn-check" name="environment" id="clean-stable" value="คอกสะอาด" required>
+                            <label class="btn btn-outline-info" for="clean-stable">
+                                <i class="fas fa-broom"></i>คอกสะอาด
+                            </label>
+
+                            <input type="radio" class="btn-check" name="environment" id="dirty-stable" value="คอกสกปรก" required>
+                            <label class="btn btn-outline-info" for="dirty-stable">
+                                <i class="fas fa-trash"></i>คอกสกปรก
+                            </label>
+
+                            <input type="radio" class="btn-check" name="environment" id="insect-infested" value="มีแมลงชุกชุม" required>
+                            <label class="btn btn-outline-info" for="insect-infested">
+                                <i class="fas fa-bug"></i>มีแมลงชุกชุม
+                            </label>
+
+                            <input type="radio" class="btn-check" name="environment" id="unstable-weather" value="อากาศแปรปรวน" required>
+                            <label class="btn btn-outline-info" for="unstable-weather">
+                                <i class="fas fa-cloud-sun-rain"></i>อากาศแปรปรวน
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- อาการที่พบ -->
+        <div class="card">
+            <div class="card-header danger-header">
+                <h3 class="mb-0">
+                    <i class="fas fa-notes-medical"></i>
+                    อาการที่พบ
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- อาการทั่วไป -->
+                    <div class="col-md-6 mb-4">
+                        <h5 class="form-label">อาการทั่วไป</h5>
+                        <div class="symptom-grid">
+                            {% for symptom in general_symptoms %}
+                            <div class="custom-checkbox">
+                                <input type="checkbox" class="btn-check" name="symptoms[]" 
+                                       id="symptom-{{ loop.index }}" value="{{ symptom.value }}">
+                                <label class="btn btn-outline-danger" for="symptom-{{ loop.index }}">
+                                    <i class="{{ symptom.icon }}"></i
+                                        {{ symptom.name }}
+                                </label>
+                            </div>
+                            {% endfor %}
+                            
+                            <!-- ตัวอย่างอาการทั่วไป -->
+                            <div class="custom-checkbox">
+                                <input type="checkbox" class="btn-check" name="symptoms[]" id="fever" value="ไข้">
+                                <label class="btn btn-outline-danger" for="fever">
+                                    <i class="fas fa-thermometer-half"></i>มีไข้
+                                </label>
+                            </div>
+
+                            <div class="custom-checkbox">
+                                <input type="checkbox" class="btn-check" name="symptoms[]" id="no-appetite" value="เบื่ออาหาร">
+                                <label class="btn btn-outline-danger" for="no-appetite">
+                                    <i class="fas fa-utensils"></i>เบื่ออาหาร
+                                </label>
+                            </div>
+
+                            <div class="custom-checkbox">
+                                <input type="checkbox" class="btn-check" name="symptoms[]" id="weight-loss" value="น้ำหนักลด">
+                                <label class="btn btn-outline-danger" for="weight-loss">
+                                    <i class="fas fa-weight"></i>น้ำหนักลด
+                                </label>
+                            </div>
+
+                            <div class="custom-checkbox">
+                                <input type="checkbox" class="btn-check" name="symptoms[]" id="cough" value="ไอ">
+                                <label class="btn btn-outline-danger" for="cough">
+                                    <i class="fas fa-head-side-cough"></i>ไอ
+                                </label>
+                            </div>
+
+                            <div class="custom-checkbox">
+                                <input type="checkbox" class="btn-check" name="symptoms[]" id="runny-nose" value="น้ำมูกไหล">
+                                <label class="btn btn-outline-danger" for="runny-nose">
+                                    <i class="fas fa-running"></i>น้ำมูกไหล
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- อาการเฉพาะ -->
+                    <div class="col-md-6">
+                        <h5 class="form-label">อาการเฉพาะ</h5>
+                        <div class="symptom-grid">
+                            <div class="custom-checkbox">
+                                <input type="checkbox" class="btn-check" name="symptoms[]" id="swollen-leg" value="ขาบวม">
+                                <label class="btn btn-outline-danger" for="swollen-leg">
+                                    <i class="fas fa-shoe-prints"></i>ขาบวม
+                                </label>
+                            </div>
+
+                            <div class="custom-checkbox">
+                                <input type="checkbox" class="btn-check" name="symptoms[]" id="abnormal-walk" value="เดินผิดปกติ">
+                                <label class="btn btn-outline-danger" for="abnormal-walk">
+                                    <i class="fas fa-walking"></i>เดินผิดปกติ
+                                </label>
+                            </div>
+
+                            <div class="custom-checkbox">
+                                <input type="checkbox" class="btn-check" name="symptoms[]" id="seizure" value="ชัก">
+                                <label class="btn btn-outline-danger" for="seizure">
+                                    <i class="fas fa-bolt"></i>ชัก
+                                </label>
+                            </div>
+
+                            <div class="custom-checkbox">
+                                <input type="checkbox" class="btn-check" name="symptoms[]" id="infection" value="ติดเชื้อ">
+                                <label class="btn btn-outline-danger" for="infection">
+                                    <i class="fas fa-virus"></i>ติดเชื้อ
+                                </label>
+                            </div>
+
+                            <div class="custom-checkbox">
+                                <input type="checkbox" class="btn-check" name="symptoms[]" id="paralysis" value="อัมพาต">
+                                <label class="btn btn-outline-danger" for="paralysis">
+                                    <i class="fas fa-wheelchair"></i>อัมพาต
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ปุ่มวินิจฉัย -->
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg px-5">
+                <i class="fas fa-stethoscope"></i>
+                วินิจฉัยโรค
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

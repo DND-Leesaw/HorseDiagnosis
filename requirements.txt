@@ -1,0 +1,12 @@
+Flask
+Flask-WTF
+Flask-Limiter
+pandas
+numpy
+joblib
+werkzeug
+logging
+shutil
+datetime
+json
+redis

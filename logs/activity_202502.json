@@ -1,0 +1,84 @@
+[
+  {
+    "timestamp": "2025-02-06T01:43:11.663064",
+    "user": "admin",
+    "action": "login",
+    "details": {
+      "ip": "127.0.0.1"
+    },
+    "ip": "127.0.0.1"
+  },
+  {
+    "timestamp": "2025-02-06T01:44:02.513479",
+    "user": "admin",
+    "action": "create_backup",
+    "details": {
+      "backup_path": "backups\\backup_20250206_014402"
+    },
+    "ip": "127.0.0.1"
+  },
+  {
+    "timestamp": "2025-02-06T01:56:01.272178",
+    "user": "admin",
+    "action": "logout",
+    "details": null,
+    "ip": "127.0.0.1"
+  },
+  {
+    "timestamp": "2025-02-06T02:05:55.836622",
+    "user": "admin",
+    "action": "login",
+    "details": {
+      "ip": "127.0.0.1"
+    },
+    "ip": "127.0.0.1"
+  },
+  {
+    "timestamp": "2025-02-06T02:08:47.150763",
+    "user": "admin",
+    "action": "logout",
+    "details": null,
+    "ip": "127.0.0.1"
+  },
+  {
+    "timestamp": "2025-02-06T02:09:31.141041",
+    "user": "admin",
+    "action": "login",
+    "details": {
+      "ip": "127.0.0.1"
+    },
+    "ip": "127.0.0.1"
+  },
+  {
+    "timestamp": "2025-02-06T02:50:59.557901",
+    "user": "admin",
+    "action": "logout",
+    "details": null,
+    "ip": "127.0.0.1"
+  },
+  {
+    "timestamp": "2025-02-06T02:52:08.080036",
+    "user": "admin",
+    "action": "login",
+    "details": {
+      "ip": "127.0.0.1"
+    },
+    "ip": "127.0.0.1"
+  },
+  {
+    "timestamp": "2025-02-06T02:52:27.507365",
+    "user": "admin",
+    "action": "logout",
+    "details": null,
+    "ip": "127.0.0.1"
+  },
+  {
+    "timestamp": "2025-02-06T02:52:36.907894",
+    "user": "admin",
+    "action": "login",
+    "details": {
+      "ip": "127.0.0.1"
+    },
+    "ip": "127.0.0.1"
+  }
+]

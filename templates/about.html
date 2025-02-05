@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block title %}เกี่ยวกับ{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header bg-dark text-white text-center py-4">
+            <h2><i class="fas fa-info-circle me-2"></i>เกี่ยวกับเรา</h2>
+        </div>
+        <div class="card-body p-4 bg-dark">
+            <div class="text-center mb-4">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="img-fluid mb-3" style="max-width: 150px;">
+                <h3 class="text-white fw-bold">Horse Disease Diagnosis System</h3>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="about-section mb-4">
+                        <h4 class="text-primary mb-3"><i class="fas fa-info-circle me-2"></i>รายละเอียดระบบ</h4>
+                        <p class="text-white fs-5 lh-lg">
+                            ระบบวินิจฉัยโรคม้าเบื้องต้นที่ถูกพัฒนาขึ้นเพื่อช่วยผู้ดูแลม้าในการตรวจสอบและคัดกรองโรคที่พบบ่อยในม้า
+                            อย่างไรก็ตาม ระบบนี้ไม่สามารถทดแทนการตรวจวินิจฉัยโดยสัตวแพทย์ผู้เชี่ยวชาญได้
+                        </p>
+                    </div>
+
+                    <div class="about-section mb-4">
+                        <h4 class="text-success mb-3"><i class="fas fa-users me-2"></i>ผู้พัฒนา</h4>
+                        <p class="text-white fs-5 lh-lg">
+                            ทีมพัฒนาประกอบด้วยผู้เชี่ยวชาญในสาขาวิศวกรรมคอมพิวเตอร์ที่มีความเชี่ยวชาญในด้านการพัฒนาระบบ AI 
+                            และการวิเคราะห์ข้อมูล
+                        </p>
+                    </div>
+
+                    {% if not session.get('logged_in') %}
+                    <div class="admin-login text-center mt-5">
+                        <h4 class="text-info mb-4"><i class="fas fa-user-shield me-2"></i>สำหรับผู้ดูแลระบบ</h4>
+                        <a href="{{ url_for('admin_login') }}" class="btn btn-primary btn-lg px-5 py-3">
+                            <i class="fas fa-sign-in-alt me-2"></i>เข้าสู่ระบบแอดมิน
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

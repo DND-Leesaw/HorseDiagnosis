@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}ผลการวินิจฉัยโรค{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow-lg border-0 rounded-lg">
+        <div class="card-header bg-success text-white text-center py-4">
+            <h2><i class="bi bi-clipboard-check-fill"></i> ผลการวินิจฉัยโรค</h2>
+        </div>
+        <div class="card-body p-4">
+            {% if disease_info %}
+                <h4 class="text-center text-danger">{{ disease_info["ชื่อโรค (ไทย)"] }} ({{ disease_info["ชื่อโรค (อังกฤษ)"] }})</h4>
+                <p><strong>อาการ:</strong> {{ disease_info["อาการ"] }}</p>
+                <p><strong>การควบคุมและป้องกัน:</strong> {{ disease_info["การควบคุมและป้องกัน"] }}</p>
+                <p><strong>ระดับความรุนแรง:</strong> {{ disease_info["ระดับความรุนแรง"] }}</p>
+            {% else %}
+                <h4 class="text-center text-danger">ไม่สามารถวินิจฉัยโรคได้</h4>
+            {% endif %}
+        </div>
+        <div class="card-footer text-center">
+            <a href="{{ url_for('home') }}" class="btn btn-primary">กลับไปหน้าหลัก</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

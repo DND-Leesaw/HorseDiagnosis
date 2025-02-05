@@ -1,0 +1,342 @@
+{% extends "layout.html" %}
+
+{% block title %}แดชบอร์ดผู้ดูแลระบบ{% endblock %}
+
+{% block content %}
+<!-- Stats Cards -->
+<div class="row g-4 mb-4">
+    <!-- โมเดลทั้งหมด -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="icon-box bg-primary bg-opacity-10">
+                    <i class="fas fa-brain text-primary fa-2x"></i>
+                </div>
+                <div>
+                    <h6 class="text-muted fw-bold">โมเดลทั้งหมด</h6>
+                    <h3 class="text-white">{{ stats.total_models }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- โรคทั้งหมด -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="icon-box bg-success bg-opacity-10">
+                    <i class="fas fa-virus text-success fa-2x"></i>
+                </div>
+                <div>
+                    <h6 class="text-muted fw-bold">ข้อมูลโรค</h6>
+                    <h3 class="text-white">{{ stats.total_diseases }} โรค</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- พื้นที่ใช้งาน -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="icon-box bg-info bg-opacity-10">
+                    <i class="fas fa-hdd text-info fa-2x"></i>
+                </div>
+                <div>
+                    <h6 class="text-muted fw-bold">พื้นที่ใช้งาน</h6>
+                    <h3 class="text-white">{{ "%.1f"|format(stats.disk_usage.models + stats.disk_usage.backups) }} MB</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- สถานะระบบ -->
+    <div class="col-12 col-sm-6 col-xl-3">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="icon-box bg-warning bg-opacity-10">
+                    <i class="fas fa-check-circle text-warning fa-2x"></i>
+                </div>
+                <div>
+                    <h6 class="text-muted fw-bold">สถานะระบบ</h6>
+                    <h3 class="text-white">พร้อมใช้งาน</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ส่วนจัดการโมเดล -->
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <div>
+            <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>จัดการโมเดล</h5>
+        </div>
+        <div>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#uploadModelModal">
+                <i class="fas fa-upload me-2"></i>อัพโหลดโมเดลใหม่
+            </button>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th width="5%">#</th>
+                        <th width="30%">ชื่อโมเดล</th>
+                        <th width="20%">วันที่อัปโหลด</th>
+                        <th width="15%">สถานะ</th>
+                        <th width="30%">การจัดการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for model in models %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-file-code text-primary me-2"></i>
+                                {{ model.model_name }}
+                            </div>
+                        </td>
+                        <td>{{ model.upload_date }}</td>
+                        <td>
+                            {% if model.status == 'active' %}
+                            <span class="badge bg-success">กำลังใช้งาน</span>
+                            {% else %}
+                            <span class="badge bg-secondary">ไม่ได้ใช้งาน</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <form method="POST" action="{{ url_for('admin_dashboard') }}" class="d-inline">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <input type="hidden" name="action" value="set_active">
+                                    <input type="hidden" name="model_name" value="{{ model.model_name }}">
+                                    <button type="submit" class="btn btn-sm btn-primary me-2" {% if model.status == 'active' %}disabled{% endif %}>
+                                        <i class="fas fa-play me-1"></i>ใช้งาน
+                                    </button>
+                                </form>
+                                <button type="button" class="btn btn-sm btn-danger" onclick="confirmDelete('{{ model.model_name }}')">
+                                    <i class="fas fa-trash me-1"></i>ลบ
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+    </div>
+
+    <!-- Disease Managem    ent -->
+    <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0"><i class="fas fa-virus me-2"></i>จัดการข้อมูลโรค</h5>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDiseaseModal">
+                <i class="fas fa-plus me-2"></i>เพิ่มข้อมูลโรค
+            </button>
+        </div>
+        <div class="card-body">
+            {% if diseases %}
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>ชื่อโรค (ไทย)</th>
+                            <th>ชื่อโรค (อังกฤษ)</th>
+                            <th>ระดับความรุนแรง</th>
+                            <th>การจัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for disease in diseases %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ disease['ชื่อโรค (ไทย)'] }}</td>
+                            <td>{{ disease['ชื่อโรค (อังกฤษ)'] }}</td>
+                            <td>
+                                <span class="badge {% if disease['ระดับความรุนแรง'] == 'สูง' %}bg-danger
+                                      {% elif disease['ระดับความรุนแรง'] == 'กลาง' %}bg-warning
+                                      {% else %}bg-success{% endif %}">
+                                    {{ disease['ระดับความรุนแรง'] }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-warning me-2" 
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editDiseaseModal{{ loop.index }}">
+                                        <i class="fas fa-edit me-1"></i>แก้ไข
+                                    </button>
+                                    <form method="POST" action="{{ url_for('admin_dashboard') }}" class="d-inline">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <input type="hidden" name="action" value="delete_disease">
+                                        <input type="hidden" name="disease_id" value="{{ loop.index }}">
+                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลโรคนี้?')">
+                                            <i class="fas fa-trash me-1"></i>ลบ
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Edit Disease Modal -->
+                        <div class="modal fade" id="editDiseaseModal{{ loop.index }}" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">แก้ไขข้อมูลโรค</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" action="{{ url_for('admin_dashboard') }}">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                            <input type="hidden" name="action" value="edit_disease">
+                                            <input type="hidden" name="disease_id" value="{{ loop.index }}">
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">ชื่อโรค (ไทย)</label>
+                                                <input type="text" class="form-control" name="thai_name"
+                                                       value="{{ disease['ชื่อโรค (ไทย)'] }}" required>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">ชื่อโรค (อังกฤษ)</label>
+                                                <input type="text" class="form-control" name="eng_name"
+                                                       value="{{ disease['ชื่อโรค (อังกฤษ)'] }}" required>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">อาการ</label>
+                                                <textarea class="form-control" name="symptoms" rows="3" 
+                                                          required>{{ disease['อาการ'] }}</textarea>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">การควบคุมและป้องกัน</label>
+                                                <textarea class="form-control" name="prevention" rows="3"
+                                                          required>{{ disease['การควบคุมและป้องกัน'] }}</textarea>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">ระดับความรุนแรง</label>
+                                                <select class="form-select" name="severity" required>
+                                                    <option value="ต่ำ" {% if disease['ระดับความรุนแรง'] == 'ต่ำ' %}selected{% endif %}>ต่ำ</option>
+                                                    <option value="กลาง" {% if disease['ระดับความรุนแรง'] == 'กลาง' %}selected{% endif %}>กลาง</option>
+                                                    <option value="สูง" {% if disease['ระดับความรุนแรง'] == 'สูง' %}selected{% endif %}>สูง</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="text-end">
+                                                <button type="button" class="btn btn-secondary me-2" 
+                                                        data-bs-dismiss="modal">ยกเลิก</button>
+                                                <button type="submit" class="btn btn-primary">บันทึก</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="text-center py-4">
+                <p class="text-muted">ยังไม่มีข้อมูลโรคในระบบ</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Upload Model Modal -->
+<div class="modal fade" id="uploadModelModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">อัพโหลดโมเดลใหม่</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('admin_dashboard') }}" 
+                      enctype="multipart/form-data">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="action" value="add_model">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">เลือกไฟล์โมเดล</label>
+                        <input type="file" class="form-control" name="model_file" 
+                               accept=".joblib,.pkl" required>
+                    </div>
+                    
+                    <div class="text-end">
+                        <button type="button" class="btn btn-secondary me-2" 
+                                data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-primary">อัพโหลด</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Disease Modal -->
+<div class="modal fade" id="addDiseaseModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">เพิ่มข้อมูลโรคใหม่</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{{ url_for('admin_dashboard') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="action" value="add_disease">
+                    
+                    <div class="mb-3">
+                        <label class="form-label">ชื่อโรค (ไทย)</label>
+                        <input type="text" class="form-control" name="thai_name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">ชื่อโรค (อังกฤษ)</label>
+                        <input type="text" class="form-control" name="eng_name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">อาการ</label>
+                        <textarea class="form-control" name="symptoms" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">การควบคุมและป้องกัน</label>
+                        <textarea class="form-control" name="prevention" rows="3" required></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">ระดับความรุนแรง</label>
+                        <select class="form-select" name="severity" required>
+                            <option value="ต่ำ">ต่ำ</option>
+                            <option value="กลาง">กลาง</option>
+                            <option value="สูง">สูง</option>
+                        </select>
+                    </div>
+                    
+                    <div class="text-end">
+                        <button type="button" class="btn btn-secondary me-2" 
+                                data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-success">เพิ่มข้อมูล</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

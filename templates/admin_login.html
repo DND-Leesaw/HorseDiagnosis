@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block title %}เข้าสู่ระบบแอดมิน{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="login-wrapper">
+                <div class="card shadow-lg border-0 bg-dark">
+                    <!-- Header -->
+                    <div class="card-header text-center py-4" style="background: linear-gradient(135deg, #4361ee, #3f37c9);">
+                        <div class="brand-logo mb-3">
+                            <i class="fas fa-horse-head fa-3x text-white"></i>
+                        </div>
+                        <h2 class="text-white fw-bold mb-0">เข้าสู่ระบบแอดมิน</h2>
+                        <p class="text-white mt-2">Horse Disease Diagnosis System</p>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="card-body p-4">
+                        <form method="POST" action="{{ url_for('admin_login') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            
+                            <!-- Username -->
+                            <div class="form-group mb-4">
+                                <label class="form-label text-white">
+                                    <i class="fas fa-user text-white me-2"></i>ชื่อผู้ใช้
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text bg-transparent border-white text-white">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control bg-transparent text-white border-white" 
+                                           name="username" 
+                                           placeholder="กรอกชื่อผู้ใช้"
+                                           required 
+                                           autofocus>
+                                </div>
+                            </div>
+                            
+                            <!-- Password -->
+                            <div class="form-group mb-4">
+                                <label class="form-label text-white">
+                                    <i class="fas fa-lock text-white me-2"></i>รหัสผ่าน
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text bg-transparent border-white text-white">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" 
+                                           class="form-control bg-transparent text-white border-white" 
+                                           name="password" 
+                                           placeholder="กรอกรหัสผ่าน"
+                                           required>
+                                </div>
+                            </div>
+
+                            <!-- Login Button -->
+                            <button type="submit" class="btn btn-primary btn-lg w-100 mt-4" 
+                                    style="background: linear-gradient(135deg, #4361ee, #3f37c9);">
+                                <i class="fas fa-sign-in-alt me-2"></i>เข้าสู่ระบบ
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Back Button -->
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('home') }}" class="text-white text-decoration-none">
+                        <i class="fas fa-arrow-left me-2"></i>กลับสู่หน้าหลัก
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

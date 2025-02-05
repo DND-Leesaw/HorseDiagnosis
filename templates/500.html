@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+
+{% block title %}500 - Server Error{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="error-page text-center">
+        <h1 class="text-danger">เกิดข้อผิดพลาด</h1>
+        
+        <!-- แสดง error message -->
+        {% if error %}
+        <div class="alert alert-danger">
+            <h3>รายละเอียดข้อผิดพลาด:</h3>
+            <pre>{{ error }}</pre>
+        </div>
+        {% endif %}
+        
+        <div class="error-actions">
+            <a href="{{ url_for('home') }}" class="btn btn-primary">กลับหน้าแรก</a>
+            <button onclick="window.location.reload();" class="btn btn-secondary">ลองใหม่</button>
+        </div>
+    </div>
+</div>
+{% endblock %}

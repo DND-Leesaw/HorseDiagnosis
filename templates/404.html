@@ -1,0 +1,122 @@
+{% extends "layout.html" %}
+
+{% block title %}404 - Page Not Found{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="error-page text-center">
+        <div class="error-code mb-4">
+            <i class="fas fa-search text-primary display-1"></i>
+            <h1 class="display-1 text-primary mt-3">404</h1>
+        </div>
+
+        <div class="error-details mb-4">
+            <h2 class="text-light mb-3">ไม่พบหน้าที่คุณต้องการ</h2>
+            <p class="lead text-light-50">
+                ขออภัย เราไม่พบหน้าที่คุณกำลังค้นหา อาจเป็นไปได้ว่า:
+            </p>
+            <ul class="text-light-50 list-unstyled mt-3">
+                <li><i class="fas fa-link-slash me-2"></i>ลิงก์ไม่ถูกต้องหรือเปลี่ยนแปลง</li>
+                <li><i class="fas fa-trash me-2"></i>หน้านี้ถูกลบไปแล้ว</li>
+                <li><i class="fas fa-keyboard me-2"></i>URL ที่พิมพ์อาจไม่ถูกต้อง</li>
+            </ul>
+        </div>
+
+        <div class="error-actions">
+            <a href="{{ url_for('home') }}" class="btn btn-primary btn-lg me-3">
+                <i class="fas fa-home me-2"></i>กลับหน้าแรก
+            </a>
+            <button onclick="history.back()" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-arrow-left me-2"></i>ย้อนกลับ
+            </button>
+        </div>
+
+        <div class="error-image mt-5">
+            <div class="horse-404">
+                <i class="fas fa-horse fa-5x text-light-50"></i>
+                <div class="dots">
+                    <i class="fas fa-question text-light-50"></i>
+                    <i class="fas fa-question text-light-50"></i>
+                    <i class="fas fa-question text-light-50"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.error-page {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.horse-404 {
+    position: relative;
+    display: inline-block;
+}
+
+.dots {
+    position: absolute;
+    top: -20px;
+    right: -40px;
+    display: flex;
+    gap: 5px;
+}
+
+.dots i {
+    font-size: 1rem;
+    opacity: 0;
+    animation: fadeInQuestion 0.5s ease-out forwards;
+}
+
+.dots i:nth-child(1) { animation-delay: 0.2s; }
+.dots i:nth-child(2) { animation-delay: 0.4s; }
+.dots i:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes fadeInQuestion {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.error-details {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.error-details ul li {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.btn {
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .error-code h1 {
+        font-size: 5rem;
+    }
+    
+    .error-details h2 {
+        font-size: 1.5rem;
+    }
+    
+    .horse-404 i {
+        font-size: 4rem;
+    }
+    
+    .dots {
+        right: -20px;
+    }
+}
+</style>
+{% endblock %}

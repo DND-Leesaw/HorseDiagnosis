@@ -1,0 +1,779 @@
+2025-02-05 15:37:27,654 - __main__ - INFO - Starting application...
+2025-02-05 15:37:27,654 - __main__ - INFO - Environment: development
+2025-02-05 15:37:27,654 - __main__ - INFO - Debug mode: True
+2025-02-05 15:37:27,654 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-05 15:37:27,671 - werkzeug - INFO -  * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.44:5000 (Press CTRL+C to quit)
+2025-02-05 15:37:27,673 - werkzeug - INFO -  * Restarting with stat
+2025-02-05 15:37:29,025 - __main__ - INFO - Starting application...
+2025-02-05 15:37:29,027 - __main__ - INFO - Environment: development
+2025-02-05 15:37:29,030 - __main__ - INFO - Debug mode: True
+2025-02-05 15:37:29,030 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-05 15:37:29,033 - werkzeug - WARNING -  * Debugger is active!
+2025-02-05 15:37:29,037 - werkzeug - INFO -  * Debugger PIN: 278-773-124
+2025-02-05 15:48:40,745 - werkzeug - INFO -  * Detected change in 'e:\\HorseDiagnosis\\app.py', reloading
+2025-02-05 15:48:40,972 - werkzeug - INFO -  * Restarting with stat
+2025-02-05 15:59:43,665 - __main__ - INFO - Starting application...
+2025-02-05 15:59:43,665 - __main__ - INFO - Environment: development
+2025-02-05 15:59:43,665 - __main__ - INFO - Debug mode: True
+2025-02-05 15:59:43,666 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-05 15:59:43,679 - werkzeug - INFO -  * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.44:5000 (Press CTRL+C to quit)
+2025-02-05 15:59:43,681 - werkzeug - INFO -  * Restarting with stat
+2025-02-05 15:59:45,049 - __main__ - INFO - Starting application...
+2025-02-05 15:59:45,049 - __main__ - INFO - Environment: development
+2025-02-05 15:59:45,049 - __main__ - INFO - Debug mode: True
+2025-02-05 15:59:45,049 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-05 15:59:45,056 - werkzeug - WARNING -  * Debugger is active!
+2025-02-05 15:59:45,062 - werkzeug - INFO -  * Debugger PIN: 278-773-124
+2025-02-05 16:00:29,260 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:00:29] "GET / HTTP/1.1" 200 -
+2025-02-05 16:00:29,327 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:00:29] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-05 16:00:32,722 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:00:32] "GET /about HTTP/1.1" 200 -
+2025-02-05 16:00:32,740 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:00:32] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-05 16:00:32,756 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:00:32] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-05 16:00:34,354 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:00:34] "GET /admin/login HTTP/1.1" 200 -
+2025-02-05 16:00:34,367 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:00:34] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-05 16:00:54,444 - flask_wtf.csrf - INFO - The CSRF token is missing.
+2025-02-05 16:00:54,444 - __main__ - ERROR - Unhandled Exception
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 261, in protect
+    validate_csrf(self._get_csrf_token())
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 100, in validate_csrf
+    raise ValidationError("The CSRF token is missing.")
+wtforms.validators.ValidationError: The CSRF token is missing.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1521, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1861, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 229, in csrf_protect
+    self.protect()
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 264, in protect
+    self._error_response(e.args[0])
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 307, in _error_response
+    raise CSRFError(reason)
+flask_wtf.csrf.CSRFError: 400 Bad Request: The CSRF token is missing.
+2025-02-05 16:00:54,463 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:00:54] "[35m[1mPOST /admin/login HTTP/1.1[0m" 500 -
+2025-02-05 16:00:54,483 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:00:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-05 16:09:27,792 - __main__ - INFO - Starting application...
+2025-02-05 16:09:27,792 - __main__ - INFO - Environment: development
+2025-02-05 16:09:27,792 - __main__ - INFO - Debug mode: True
+2025-02-05 16:09:27,792 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-05 16:09:27,805 - werkzeug - INFO -  * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.44:5000 (Press CTRL+C to quit)
+2025-02-05 16:09:27,808 - werkzeug - INFO -  * Restarting with stat
+2025-02-05 16:09:29,126 - __main__ - INFO - Starting application...
+2025-02-05 16:09:29,127 - __main__ - INFO - Environment: development
+2025-02-05 16:09:29,127 - __main__ - INFO - Debug mode: True
+2025-02-05 16:09:29,127 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-05 16:09:29,131 - werkzeug - WARNING -  * Debugger is active!
+2025-02-05 16:09:29,136 - werkzeug - INFO -  * Debugger PIN: 278-773-124
+2025-02-05 16:09:43,520 - flask_wtf.csrf - INFO - The CSRF token is missing.
+2025-02-05 16:09:43,520 - __main__ - ERROR - Unhandled Exception
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 261, in protect
+    validate_csrf(self._get_csrf_token())
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 100, in validate_csrf
+    raise ValidationError("The CSRF token is missing.")
+wtforms.validators.ValidationError: The CSRF token is missing.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1521, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1861, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 229, in csrf_protect
+    self.protect()
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 264, in protect
+    self._error_response(e.args[0])
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 307, in _error_response
+    raise CSRFError(reason)
+flask_wtf.csrf.CSRFError: 400 Bad Request: The CSRF token is missing.
+2025-02-05 16:09:43,547 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:09:43] "[35m[1mPOST /admin/login HTTP/1.1[0m" 500 -
+2025-02-05 16:09:43,606 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:09:43] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-05 16:09:43,765 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:09:43] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-05 16:09:48,235 - flask_wtf.csrf - INFO - The CSRF token is missing.
+2025-02-05 16:09:48,238 - __main__ - ERROR - Unhandled Exception
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 261, in protect
+    validate_csrf(self._get_csrf_token())
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 100, in validate_csrf
+    raise ValidationError("The CSRF token is missing.")
+wtforms.validators.ValidationError: The CSRF token is missing.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1521, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1861, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 229, in csrf_protect
+    self.protect()
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 264, in protect
+    self._error_response(e.args[0])
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 307, in _error_response
+    raise CSRFError(reason)
+flask_wtf.csrf.CSRFError: 400 Bad Request: The CSRF token is missing.
+2025-02-05 16:09:48,241 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:09:48] "[35m[1mPOST /admin/login HTTP/1.1[0m" 500 -
+2025-02-05 16:09:48,504 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:09:48] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-05 16:09:48,643 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:09:48] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-05 16:09:50,877 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:09:50] "GET / HTTP/1.1" 200 -
+2025-02-05 16:09:51,134 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:09:51] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-05 16:09:54,622 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:09:54] "GET /about HTTP/1.1" 200 -
+2025-02-05 16:09:54,953 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:09:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-05 16:09:54,955 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:09:54] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-05 16:09:56,783 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:09:56] "GET /admin/login HTTP/1.1" 200 -
+2025-02-05 16:09:57,114 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:09:57] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-05 16:10:10,507 - flask_wtf.csrf - INFO - The CSRF token is missing.
+2025-02-05 16:10:10,508 - __main__ - ERROR - Unhandled Exception
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 261, in protect
+    validate_csrf(self._get_csrf_token())
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 100, in validate_csrf
+    raise ValidationError("The CSRF token is missing.")
+wtforms.validators.ValidationError: The CSRF token is missing.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1521, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1861, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 229, in csrf_protect
+    self.protect()
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 264, in protect
+    self._error_response(e.args[0])
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 307, in _error_response
+    raise CSRFError(reason)
+flask_wtf.csrf.CSRFError: 400 Bad Request: The CSRF token is missing.
+2025-02-05 16:10:10,511 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:10:10] "[35m[1mPOST /admin/login HTTP/1.1[0m" 500 -
+2025-02-05 16:10:10,842 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:10:10] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-05 16:13:49,407 - __main__ - INFO - Starting application...
+2025-02-05 16:13:49,407 - __main__ - INFO - Environment: development
+2025-02-05 16:13:49,414 - __main__ - INFO - Debug mode: True
+2025-02-05 16:13:49,415 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-05 16:13:49,421 - werkzeug - INFO -  * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.44:5000 (Press CTRL+C to quit)
+2025-02-05 16:13:49,421 - werkzeug - INFO -  * Restarting with stat
+2025-02-05 16:13:50,842 - __main__ - INFO - Starting application...
+2025-02-05 16:13:50,842 - __main__ - INFO - Environment: development
+2025-02-05 16:13:50,842 - __main__ - INFO - Debug mode: True
+2025-02-05 16:13:50,842 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-05 16:13:50,849 - werkzeug - WARNING -  * Debugger is active!
+2025-02-05 16:13:50,851 - werkzeug - INFO -  * Debugger PIN: 278-773-124
+2025-02-05 16:13:58,728 - flask_wtf.csrf - INFO - The CSRF token is missing.
+2025-02-05 16:13:58,734 - __main__ - ERROR - Unhandled Exception
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 261, in protect
+    validate_csrf(self._get_csrf_token())
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 100, in validate_csrf
+    raise ValidationError("The CSRF token is missing.")
+wtforms.validators.ValidationError: The CSRF token is missing.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1521, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1861, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 229, in csrf_protect
+    self.protect()
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 264, in protect
+    self._error_response(e.args[0])
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 307, in _error_response
+    raise CSRFError(reason)
+flask_wtf.csrf.CSRFError: 400 Bad Request: The CSRF token is missing.
+2025-02-05 16:13:58,768 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:13:58] "[35m[1mPOST /admin/login HTTP/1.1[0m" 500 -
+2025-02-05 16:13:59,004 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:13:59] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-05 16:13:59,167 - werkzeug - INFO - 127.0.0.1 - - [05/Feb/2025 16:13:59] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 01:25:00,413 - __main__ - INFO - Starting application...
+2025-02-06 01:25:00,413 - __main__ - INFO - Environment: development
+2025-02-06 01:25:00,413 - __main__ - INFO - Debug mode: True
+2025-02-06 01:25:00,413 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-06 01:25:00,437 - werkzeug - INFO -  * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.44:5000 (Press CTRL+C to quit)
+2025-02-06 01:25:00,441 - werkzeug - INFO -  * Restarting with stat
+2025-02-06 01:25:01,835 - __main__ - INFO - Starting application...
+2025-02-06 01:25:01,835 - __main__ - INFO - Environment: development
+2025-02-06 01:25:01,835 - __main__ - INFO - Debug mode: True
+2025-02-06 01:25:01,835 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-06 01:25:01,845 - werkzeug - WARNING -  * Debugger is active!
+2025-02-06 01:25:01,852 - werkzeug - INFO -  * Debugger PIN: 278-773-124
+2025-02-06 01:25:05,686 - flask_wtf.csrf - INFO - The CSRF token is missing.
+2025-02-06 01:25:05,686 - __main__ - ERROR - Unhandled Exception
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 261, in protect
+    validate_csrf(self._get_csrf_token())
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 100, in validate_csrf
+    raise ValidationError("The CSRF token is missing.")
+wtforms.validators.ValidationError: The CSRF token is missing.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1521, in full_dispatch_request
+    rv = self.preprocess_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1861, in preprocess_request
+    rv = self.ensure_sync(before_func)()
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 229, in csrf_protect
+    self.protect()
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 264, in protect
+    self._error_response(e.args[0])
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask_wtf\csrf.py", line 307, in _error_response
+    raise CSRFError(reason)
+flask_wtf.csrf.CSRFError: 400 Bad Request: The CSRF token is missing.
+2025-02-06 01:25:05,742 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:05] "[35m[1mPOST /admin/login HTTP/1.1[0m" 500 -
+2025-02-06 01:25:05,980 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:05] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:25:06,121 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:06] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 01:25:08,197 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:08] "GET / HTTP/1.1" 200 -
+2025-02-06 01:25:08,447 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:08] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:25:10,582 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:10] "GET /about HTTP/1.1" 200 -
+2025-02-06 01:25:10,906 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:10] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:25:10,918 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:10] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 01:25:12,588 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:12] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 01:25:12,909 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:12] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:25:20,859 - __main__ - WARNING - การเข้าสู่ระบบล้มเหลว สำหรับผู้ใช้: leesaw
+2025-02-06 01:25:20,862 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:20] "POST /admin/login HTTP/1.1" 200 -
+2025-02-06 01:25:21,183 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:21] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:25:31,326 - __main__ - WARNING - การเข้าสู่ระบบล้มเหลว สำหรับผู้ใช้: leesaw
+2025-02-06 01:25:31,329 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:31] "POST /admin/login HTTP/1.1" 200 -
+2025-02-06 01:25:31,648 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:31] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:25:44,629 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:44] "GET / HTTP/1.1" 200 -
+2025-02-06 01:25:44,957 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:25:44] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:36:30,588 - __main__ - INFO - Starting application...
+2025-02-06 01:36:30,590 - __main__ - INFO - Environment: development
+2025-02-06 01:36:30,590 - __main__ - INFO - Debug mode: True
+2025-02-06 01:36:30,590 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-06 01:36:30,602 - werkzeug - INFO -  * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.44:5000 (Press CTRL+C to quit)
+2025-02-06 01:36:30,603 - werkzeug - INFO -  * Restarting with stat
+2025-02-06 01:36:31,962 - __main__ - INFO - Starting application...
+2025-02-06 01:36:31,962 - __main__ - INFO - Environment: development
+2025-02-06 01:36:31,962 - __main__ - INFO - Debug mode: True
+2025-02-06 01:36:31,962 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-06 01:36:31,973 - werkzeug - WARNING -  * Debugger is active!
+2025-02-06 01:36:31,977 - werkzeug - INFO -  * Debugger PIN: 278-773-124
+2025-02-06 01:36:35,108 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:36:35] "GET / HTTP/1.1" 200 -
+2025-02-06 01:36:35,166 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:36:35] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:36:39,415 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:36:39] "GET /about HTTP/1.1" 200 -
+2025-02-06 01:36:39,440 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:36:39] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:36:39,444 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:36:39] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 01:36:41,259 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:36:41] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 01:36:41,282 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:36:41] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:36:48,707 - __main__ - WARNING - การเข้าสู่ระบบล้มเหลว สำหรับผู้ใช้: leesaw
+2025-02-06 01:36:48,710 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:36:48] "POST /admin/login HTTP/1.1" 200 -
+2025-02-06 01:36:48,723 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:36:48] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:37:11,401 - __main__ - WARNING - การเข้าสู่ระบบล้มเหลว สำหรับผู้ใช้: leesaw
+2025-02-06 01:37:11,403 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:37:11] "POST /admin/login HTTP/1.1" 200 -
+2025-02-06 01:37:11,425 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:37:11] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:43:11,703 - __main__ - INFO - ผู้ใช้ admin เข้าสู่ระบบสำเร็จ
+2025-02-06 01:43:11,704 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:43:11] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2025-02-06 01:43:11,734 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:43:11] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 01:43:11,755 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:43:11] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:44:02,515 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:44:02] "[32mPOST /admin/dashboard HTTP/1.1[0m" 302 -
+2025-02-06 01:44:02,526 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:44:02] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 01:44:02,553 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:44:02] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:50:01,029 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:50:01] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 01:50:01,062 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:50:01] "GET /static/style.css HTTP/1.1" 200 -
+2025-02-06 01:50:01,180 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:50:01] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 01:50:45,852 - __main__ - ERROR - Unhandled Exception
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1499, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1481, in raise_routing_exception
+    raise request.routing_exception  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\ctx.py", line 397, in match_request
+    result = self.url_adapter.match(return_rule=True)  # type: ignore
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\werkzeug\routing.py", line 2042, in match
+    raise MethodNotAllowed(valid_methods=list(have_match_for))
+werkzeug.exceptions.MethodNotAllowed: 405 Method Not Allowed: The method is not allowed for the requested URL.
+2025-02-06 01:50:45,892 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:50:45] "[35m[1mPOST /admin/logout HTTP/1.1[0m" 500 -
+2025-02-06 01:50:45,911 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:50:45] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:50:50,907 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:50:50] "GET / HTTP/1.1" 200 -
+2025-02-06 01:50:50,924 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:50:50] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:50:53,978 - __main__ - ERROR - Unhandled Exception
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1499, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1481, in raise_routing_exception
+    raise request.routing_exception  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\ctx.py", line 397, in match_request
+    result = self.url_adapter.match(return_rule=True)  # type: ignore
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\werkzeug\routing.py", line 2042, in match
+    raise MethodNotAllowed(valid_methods=list(have_match_for))
+werkzeug.exceptions.MethodNotAllowed: 405 Method Not Allowed: The method is not allowed for the requested URL.
+2025-02-06 01:50:53,980 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:50:53] "[35m[1mPOST /admin/logout HTTP/1.1[0m" 500 -
+2025-02-06 01:50:53,993 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:50:53] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:53:06,923 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:53:06] "GET / HTTP/1.1" 200 -
+2025-02-06 01:53:06,949 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:53:06] "GET /static/style.css HTTP/1.1" 200 -
+2025-02-06 01:53:07,765 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:53:07] "GET / HTTP/1.1" 200 -
+2025-02-06 01:53:07,786 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:53:07] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:53:10,415 - __main__ - ERROR - Unhandled Exception
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1499, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1481, in raise_routing_exception
+    raise request.routing_exception  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\ctx.py", line 397, in match_request
+    result = self.url_adapter.match(return_rule=True)  # type: ignore
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\werkzeug\routing.py", line 2042, in match
+    raise MethodNotAllowed(valid_methods=list(have_match_for))
+werkzeug.exceptions.MethodNotAllowed: 405 Method Not Allowed: The method is not allowed for the requested URL.
+2025-02-06 01:53:10,417 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:53:10] "[35m[1mPOST /admin/logout HTTP/1.1[0m" 500 -
+2025-02-06 01:53:10,432 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:53:10] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:54:03,321 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:03] "GET / HTTP/1.1" 200 -
+2025-02-06 01:54:03,337 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:03] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:54:08,299 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:08] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 01:54:08,316 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:08] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:54:10,091 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:10] "GET / HTTP/1.1" 200 -
+2025-02-06 01:54:10,109 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:10] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:54:12,228 - __main__ - ERROR - Unhandled Exception
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1499, in dispatch_request
+    self.raise_routing_exception(req)
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1481, in raise_routing_exception
+    raise request.routing_exception  # type: ignore
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\ctx.py", line 397, in match_request
+    result = self.url_adapter.match(return_rule=True)  # type: ignore
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\werkzeug\routing.py", line 2042, in match
+    raise MethodNotAllowed(valid_methods=list(have_match_for))
+werkzeug.exceptions.MethodNotAllowed: 405 Method Not Allowed: The method is not allowed for the requested URL.
+2025-02-06 01:54:12,230 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:12] "[35m[1mPOST /admin/logout HTTP/1.1[0m" 500 -
+2025-02-06 01:54:12,244 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:12] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:54:14,417 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:14] "GET / HTTP/1.1" 200 -
+2025-02-06 01:54:14,433 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:14] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:54:15,378 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:15] "GET /about HTTP/1.1" 200 -
+2025-02-06 01:54:15,395 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:15] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:54:15,396 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:15] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 01:54:17,700 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:17] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 01:54:17,719 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:54:17] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:55:42,964 - werkzeug - INFO -  * Detected change in 'e:\\HorseDiagnosis\\app.py', reloading
+2025-02-06 01:55:43,200 - werkzeug - INFO -  * Restarting with stat
+2025-02-06 01:55:44,827 - __main__ - INFO - Starting application...
+2025-02-06 01:55:44,828 - __main__ - INFO - Environment: development
+2025-02-06 01:55:44,828 - __main__ - INFO - Debug mode: True
+2025-02-06 01:55:44,828 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-06 01:55:44,834 - werkzeug - WARNING -  * Debugger is active!
+2025-02-06 01:55:44,837 - werkzeug - INFO -  * Debugger PIN: 278-773-124
+2025-02-06 01:56:01,274 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:56:01] "[32mPOST /admin/logout HTTP/1.1[0m" 302 -
+2025-02-06 01:56:01,296 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:56:01] "GET / HTTP/1.1" 200 -
+2025-02-06 01:56:01,351 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:56:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:56:43,134 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:56:43] "GET / HTTP/1.1" 200 -
+2025-02-06 01:56:43,153 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:56:43] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:56:44,053 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:56:44] "GET /about HTTP/1.1" 200 -
+2025-02-06 01:56:44,069 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:56:44] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:56:44,072 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:56:44] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 01:56:46,856 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:56:46] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 01:56:46,898 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:56:46] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-02-06 01:58:23,409 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:23] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 01:58:23,427 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:23] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:58:40,290 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:40] "GET / HTTP/1.1" 200 -
+2025-02-06 01:58:40,321 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:40] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:58:42,650 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:42] "GET / HTTP/1.1" 200 -
+2025-02-06 01:58:42,662 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:42] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:58:43,757 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:43] "GET /about HTTP/1.1" 200 -
+2025-02-06 01:58:43,773 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:43] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:58:43,776 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:43] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 01:58:47,188 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:47] "GET / HTTP/1.1" 200 -
+2025-02-06 01:58:47,203 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:47] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:58:49,216 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:49] "GET /about HTTP/1.1" 200 -
+2025-02-06 01:58:49,233 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 01:58:49,235 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:49] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 01:58:52,054 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:52] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 01:58:52,071 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 01:58:52] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:01:47,094 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:01:47] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 02:01:47,113 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:01:47] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:01:47,157 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:01:47] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 02:05:43,029 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:05:43] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 02:05:43,055 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:05:43] "GET /static/style.css HTTP/1.1" 200 -
+2025-02-06 02:05:43,150 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:05:43] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 02:05:43,955 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:05:43] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 02:05:43,975 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:05:43] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:05:44,037 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:05:44] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 02:05:45,277 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:05:45] "GET /about HTTP/1.1" 200 -
+2025-02-06 02:05:45,309 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:05:45] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:05:45,315 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:05:45] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 02:05:47,962 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:05:47] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 02:05:47,982 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:05:47] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:05:55,837 - __main__ - INFO - ผู้ใช้ admin เข้าสู่ระบบสำเร็จ
+2025-02-06 02:05:55,839 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:05:55] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2025-02-06 02:05:55,856 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:05:55] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 02:05:55,893 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:05:55] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:08:32,956 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:32] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 02:08:32,992 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:32] "GET /static/style.css HTTP/1.1" 200 -
+2025-02-06 02:08:33,100 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:33] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 02:08:35,068 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:35] "GET / HTTP/1.1" 200 -
+2025-02-06 02:08:35,100 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:35] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:08:39,647 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:39] "GET / HTTP/1.1" 200 -
+2025-02-06 02:08:39,659 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:39] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:08:41,747 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:41] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 02:08:41,767 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:41] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:08:42,859 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:42] "GET / HTTP/1.1" 200 -
+2025-02-06 02:08:42,881 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:42] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:08:44,835 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:44] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 02:08:44,862 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:44] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:08:47,153 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:47] "[32mPOST /admin/logout HTTP/1.1[0m" 302 -
+2025-02-06 02:08:47,158 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:47] "GET / HTTP/1.1" 200 -
+2025-02-06 02:08:47,183 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:47] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:08:47,935 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:47] "GET /about HTTP/1.1" 200 -
+2025-02-06 02:08:47,956 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:47] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:08:47,958 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:47] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 02:08:51,313 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:51] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 02:08:51,338 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:51] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:08:56,662 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:56] "GET / HTTP/1.1" 200 -
+2025-02-06 02:08:56,683 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:56] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:08:58,295 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:58] "GET /about HTTP/1.1" 200 -
+2025-02-06 02:08:58,319 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:58] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:08:58,322 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:58] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 02:08:59,259 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:59] "GET / HTTP/1.1" 200 -
+2025-02-06 02:08:59,282 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:08:59] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:09:00,151 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:09:00] "GET /about HTTP/1.1" 200 -
+2025-02-06 02:09:00,179 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:09:00] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:09:00,180 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:09:00] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 02:09:02,293 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:09:02] "GET / HTTP/1.1" 200 -
+2025-02-06 02:09:02,315 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:09:02] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:09:21,661 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:09:21] "GET /about HTTP/1.1" 200 -
+2025-02-06 02:09:21,688 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:09:21] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:09:21,689 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:09:21] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 02:09:23,093 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:09:23] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 02:09:23,122 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:09:23] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:09:31,142 - __main__ - INFO - ผู้ใช้ admin เข้าสู่ระบบสำเร็จ
+2025-02-06 02:09:31,143 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:09:31] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2025-02-06 02:09:31,152 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:09:31] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 02:09:31,195 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:09:31] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:13:51,205 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:13:51] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 02:13:51,227 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:13:51] "GET /static/style.css HTTP/1.1" 200 -
+2025-02-06 02:13:51,501 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:13:51] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 02:22:51,501 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:22:51] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 02:22:51,522 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:22:51] "GET /static/style.css HTTP/1.1" 200 -
+2025-02-06 02:22:51,803 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:22:51] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 02:27:03,877 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:27:03] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 02:27:03,912 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:27:03] "GET /static/style.css HTTP/1.1" 200 -
+2025-02-06 02:27:04,059 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:27:04] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 02:27:52,430 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:27:52] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 02:27:52,465 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:27:52] "GET /static/style.css HTTP/1.1" 200 -
+2025-02-06 02:27:52,568 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:27:52] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 02:27:53,680 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:27:53] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 02:27:53,700 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:27:53] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:27:53,741 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:27:53] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 02:27:54,561 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:27:54] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 02:34:24,004 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:34:24] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 02:34:24,032 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:34:24] "GET /static/style.css HTTP/1.1" 200 -
+2025-02-06 02:34:24,191 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:34:24] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 02:34:24,930 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:34:24] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 02:34:24,953 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:34:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:34:25,040 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:34:25] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 02:50:31,068 - __main__ - ERROR - Error loading dashboard data
+Traceback (most recent call last):
+  File "e:\HorseDiagnosis\app.py", line 519, in admin_dashboard
+    return render_template('admin_dashboard.html',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\templating.py", line 149, in render_template
+    ctx.app.jinja_env.get_or_select_template(template_name_or_list),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 1081, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 1010, in get_template
+    return self._load_template(name, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 969, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 768, in compile
+    self.handle_exception(source=source_hint)
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "e:\HorseDiagnosis\templates\admin_dashboard.html", line 247, in template
+    {% endfor %}
+jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endfor'. Jinja was looking for the following tags: 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'.
+2025-02-06 02:50:31,089 - __main__ - ERROR - Unhandled Exception
+Traceback (most recent call last):
+  File "e:\HorseDiagnosis\app.py", line 519, in admin_dashboard
+    return render_template('admin_dashboard.html',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\templating.py", line 149, in render_template
+    ctx.app.jinja_env.get_or_select_template(template_name_or_list),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 1081, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 1010, in get_template
+    return self._load_template(name, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 969, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 768, in compile
+    self.handle_exception(source=source_hint)
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "e:\HorseDiagnosis\templates\admin_dashboard.html", line 247, in template
+    {% endfor %}
+jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endfor'. Jinja was looking for the following tags: 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1509, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "e:\HorseDiagnosis\app.py", line 228, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "e:\HorseDiagnosis\app.py", line 528, in admin_dashboard
+    return render_template('admin_dashboard.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\templating.py", line 149, in render_template
+    ctx.app.jinja_env.get_or_select_template(template_name_or_list),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 1081, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 1010, in get_template
+    return self._load_template(name, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 969, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 768, in compile
+    self.handle_exception(source=source_hint)
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "e:\HorseDiagnosis\templates\admin_dashboard.html", line 247, in template
+    {% endfor %}
+jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endfor'. Jinja was looking for the following tags: 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'.
+2025-02-06 02:50:31,099 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:50:31] "[35m[1mGET /admin/dashboard HTTP/1.1[0m" 500 -
+2025-02-06 02:50:31,134 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:50:31] "GET /static/style.css HTTP/1.1" 200 -
+2025-02-06 02:50:31,367 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:50:31] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 02:50:44,240 - __main__ - INFO - Starting application...
+2025-02-06 02:50:44,240 - __main__ - INFO - Environment: development
+2025-02-06 02:50:44,240 - __main__ - INFO - Debug mode: True
+2025-02-06 02:50:44,240 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-06 02:50:44,267 - werkzeug - INFO -  * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.44:5000 (Press CTRL+C to quit)
+2025-02-06 02:50:44,270 - werkzeug - INFO -  * Restarting with stat
+2025-02-06 02:50:45,620 - __main__ - INFO - Starting application...
+2025-02-06 02:50:45,630 - __main__ - INFO - Environment: development
+2025-02-06 02:50:45,631 - __main__ - INFO - Debug mode: True
+2025-02-06 02:50:45,631 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-06 02:50:45,631 - werkzeug - WARNING -  * Debugger is active!
+2025-02-06 02:50:45,640 - werkzeug - INFO -  * Debugger PIN: 278-773-124
+2025-02-06 02:50:49,658 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:50:49] "GET / HTTP/1.1" 200 -
+2025-02-06 02:50:49,722 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:50:49] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:50:54,031 - __main__ - ERROR - Error loading dashboard data
+Traceback (most recent call last):
+  File "e:\HorseDiagnosis\app.py", line 519, in admin_dashboard
+    return render_template('admin_dashboard.html',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\templating.py", line 149, in render_template
+    ctx.app.jinja_env.get_or_select_template(template_name_or_list),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 1081, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 1010, in get_template
+    return self._load_template(name, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 969, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 768, in compile
+    self.handle_exception(source=source_hint)
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "e:\HorseDiagnosis\templates\admin_dashboard.html", line 247, in template
+    {% endfor %}
+jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endfor'. Jinja was looking for the following tags: 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'.
+2025-02-06 02:50:54,037 - __main__ - ERROR - Unhandled Exception
+Traceback (most recent call last):
+  File "e:\HorseDiagnosis\app.py", line 519, in admin_dashboard
+    return render_template('admin_dashboard.html',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\templating.py", line 149, in render_template
+    ctx.app.jinja_env.get_or_select_template(template_name_or_list),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 1081, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 1010, in get_template
+    return self._load_template(name, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 969, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 768, in compile
+    self.handle_exception(source=source_hint)
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "e:\HorseDiagnosis\templates\admin_dashboard.html", line 247, in template
+    {% endfor %}
+jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endfor'. Jinja was looking for the following tags: 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1523, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\app.py", line 1509, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**req.view_args)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "e:\HorseDiagnosis\app.py", line 228, in decorated_function
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "e:\HorseDiagnosis\app.py", line 528, in admin_dashboard
+    return render_template('admin_dashboard.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\flask\templating.py", line 149, in render_template
+    ctx.app.jinja_env.get_or_select_template(template_name_or_list),
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 1081, in get_or_select_template
+    return self.get_template(template_name_or_list, parent, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 1010, in get_template
+    return self._load_template(name, globals)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 969, in _load_template
+    template = self.loader.load(self, name, self.make_globals(globals))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\loaders.py", line 138, in load
+    code = environment.compile(source, name, filename)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 768, in compile
+    self.handle_exception(source=source_hint)
+  File "C:\Users\ASUS\AppData\Local\Programs\Python\Python311\Lib\site-packages\jinja2\environment.py", line 936, in handle_exception
+    raise rewrite_traceback_stack(source=source)
+  File "e:\HorseDiagnosis\templates\admin_dashboard.html", line 247, in template
+    {% endfor %}
+jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endfor'. Jinja was looking for the following tags: 'elif' or 'else' or 'endif'. The innermost block that needs to be closed is 'if'.
+2025-02-06 02:50:54,042 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:50:54] "[35m[1mGET /admin/dashboard HTTP/1.1[0m" 500 -
+2025-02-06 02:50:54,067 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:50:54] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:50:59,559 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:50:59] "[32mPOST /admin/logout HTTP/1.1[0m" 302 -
+2025-02-06 02:50:59,564 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:50:59] "GET / HTTP/1.1" 200 -
+2025-02-06 02:50:59,582 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:50:59] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:51:00,534 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:00] "GET /about HTTP/1.1" 200 -
+2025-02-06 02:51:00,555 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:00] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:51:00,557 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:00] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 02:51:01,577 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:01] "GET /about HTTP/1.1" 200 -
+2025-02-06 02:51:01,596 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:51:01,601 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:01] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 02:51:02,705 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:02] "GET /about HTTP/1.1" 200 -
+2025-02-06 02:51:02,722 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:02] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:51:02,724 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:02] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 02:51:06,150 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:06] "GET / HTTP/1.1" 200 -
+2025-02-06 02:51:06,176 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:06] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:51:07,459 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:07] "GET /about HTTP/1.1" 200 -
+2025-02-06 02:51:07,480 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:07] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:51:07,481 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:07] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 02:51:10,076 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:10] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 02:51:10,096 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:51:10] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:52:01,069 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:01] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 02:52:01,087 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:01] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:52:01,130 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:01] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 02:52:08,080 - __main__ - INFO - ผู้ใช้ admin เข้าสู่ระบบสำเร็จ
+2025-02-06 02:52:08,081 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:08] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2025-02-06 02:52:08,109 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:08] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 02:52:08,138 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:08] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:52:25,257 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:25] "GET / HTTP/1.1" 200 -
+2025-02-06 02:52:25,280 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:25] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:52:27,508 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:27] "[32mPOST /admin/logout HTTP/1.1[0m" 302 -
+2025-02-06 02:52:27,515 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:27] "GET / HTTP/1.1" 200 -
+2025-02-06 02:52:27,538 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:27] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:52:29,000 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:29] "GET /about HTTP/1.1" 200 -
+2025-02-06 02:52:29,023 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:29] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:52:29,025 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:29] "[33mGET /static/logo.png HTTP/1.1[0m" 404 -
+2025-02-06 02:52:31,354 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:31] "GET /admin/login HTTP/1.1" 200 -
+2025-02-06 02:52:31,377 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:31] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 02:52:36,909 - __main__ - INFO - ผู้ใช้ admin เข้าสู่ระบบสำเร็จ
+2025-02-06 02:52:36,910 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:36] "[32mPOST /admin/login HTTP/1.1[0m" 302 -
+2025-02-06 02:52:36,917 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:36] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 02:52:36,949 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 02:52:36] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 03:18:25,409 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 03:18:25] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 03:18:25,442 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 03:18:25] "GET /static/style.css HTTP/1.1" 200 -
+2025-02-06 03:18:25,744 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 03:18:25] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 03:18:26,418 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 03:18:26] "GET /admin/dashboard HTTP/1.1" 200 -
+2025-02-06 03:18:26,448 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 03:18:26] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 03:18:26,489 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 03:18:26] "[36mGET /static/horse.png HTTP/1.1[0m" 304 -
+2025-02-06 03:18:42,368 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 03:18:42] "GET / HTTP/1.1" 200 -
+2025-02-06 03:18:42,393 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 03:18:42] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 03:29:22,661 - werkzeug - INFO -  * Detected change in 'e:\\HorseDiagnosis\\อื่นๆ\\secretkey.py', reloading
+2025-02-06 03:29:22,826 - werkzeug - INFO -  * Restarting with stat
+2025-02-06 03:29:24,354 - __main__ - INFO - Starting application...
+2025-02-06 03:29:24,355 - __main__ - INFO - Environment: development
+2025-02-06 03:29:24,355 - __main__ - INFO - Debug mode: True
+2025-02-06 03:29:24,355 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-06 03:29:24,363 - werkzeug - WARNING -  * Debugger is active!
+2025-02-06 03:29:24,367 - werkzeug - INFO -  * Debugger PIN: 278-773-124
