@@ -1,0 +1,22 @@
+ name: Auto Deploy to Server
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Restart Server
+        run: |
+          sudo systemctl restart my-flask-app  # หรือใช้ gunicorn / supervisor
+

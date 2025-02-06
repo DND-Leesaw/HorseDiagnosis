@@ -820,3 +820,9 @@ jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endfor'. Jinja w
 2025-02-06 07:27:03,108 - werkzeug - INFO -  * Debugger PIN: 278-773-124
 2025-02-06 07:36:57,549 - werkzeug - INFO -  * Detected change in 'e:\\HorseDiagnosis\\app.py', reloading
 2025-02-06 07:36:57,715 - werkzeug - INFO -  * Restarting with stat
+2025-02-06 07:36:59,338 - __main__ - INFO - Starting application...
+2025-02-06 07:36:59,338 - __main__ - INFO - Environment: development
+2025-02-06 07:36:59,338 - __main__ - INFO - Debug mode: True
+2025-02-06 07:36:59,339 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-06 07:36:59,346 - werkzeug - WARNING -  * Debugger is active!
+2025-02-06 07:36:59,349 - werkzeug - INFO -  * Debugger PIN: 278-773-124
