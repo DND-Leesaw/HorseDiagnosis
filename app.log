@@ -777,3 +777,20 @@ jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endfor'. Jinja w
 2025-02-06 03:29:24,355 - __main__ - INFO - Model and disease data loaded successfully
 2025-02-06 03:29:24,363 - werkzeug - WARNING -  * Debugger is active!
 2025-02-06 03:29:24,367 - werkzeug - INFO -  * Debugger PIN: 278-773-124
+2025-02-06 04:55:13,489 - __main__ - INFO - Starting application...
+2025-02-06 04:55:13,489 - __main__ - INFO - Environment: development
+2025-02-06 04:55:13,489 - __main__ - INFO - Debug mode: True
+2025-02-06 04:55:13,489 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-06 04:55:13,501 - werkzeug - INFO -  * Running on all addresses (0.0.0.0)
+   WARNING: This is a development server. Do not use it in a production deployment.
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.44:5000 (Press CTRL+C to quit)
+2025-02-06 04:55:13,510 - werkzeug - INFO -  * Restarting with stat
+2025-02-06 04:55:14,873 - __main__ - INFO - Starting application...
+2025-02-06 04:55:14,873 - __main__ - INFO - Environment: development
+2025-02-06 04:55:14,873 - __main__ - INFO - Debug mode: True
+2025-02-06 04:55:14,873 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-06 04:55:14,888 - werkzeug - WARNING -  * Debugger is active!
+2025-02-06 04:55:14,892 - werkzeug - INFO -  * Debugger PIN: 278-773-124
+2025-02-06 04:55:24,094 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 04:55:24] "GET / HTTP/1.1" 200 -
+2025-02-06 04:55:24,150 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 04:55:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -

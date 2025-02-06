@@ -321,62 +321,64 @@ def admin_dashboard():
             
             try:
                 if action == 'add_model':
+                    # ตรวจสอบไฟล์ที่อัพโหลด
                     if 'model_file' not in request.files:
-                        raise CustomError('ไม่พบไฟล์ที่อัปโหลด')
+                        raise CustomError('กรุณาเลือกไฟล์โมเดล')
                     
                     file = request.files['model_file']
-                    validate_model_file(file)
+                    if not file or not file.filename:
+                        raise CustomError('ไม่พบไฟล์ที่อัพโหลด')
+                    
+                    if not allowed_file(file.filename):
+                        raise CustomError('รองรับเฉพาะไฟล์ .joblib และ .pkl เท่านั้น')
                     
                     filename = secure_filename(file.filename)
-                    filepath = os.path.join(MODEL_FOLDER, filename)
-                    
                     temp_path = os.path.join(MODEL_FOLDER, f'temp_{filename}')
-                    file.save(temp_path)
                     
-                    if not is_valid_model_file(temp_path):
-                        os.remove(temp_path)
-                        raise CustomError('ไฟล์โมเดลไม่ถูกต้อง')
-                    
-                    os.replace(temp_path, filepath)
-                    
-                    ActivityLog(
-                        user=session['username'],
-                        action='add_model',
-                        details={'model_name': filename}
-                    ).save()
-                    
-                    flash('อัปโหลดโมเดลสำเร็จ', 'success')
-                    
-                elif action == 'delete_model':
-                    model_name = request.form.get('model_name')
-                    filepath = os.path.join(MODEL_FOLDER, model_name)
-                    
-                    if os.path.exists(filepath):
-                        backup_path = os.path.join(BACKUP_FOLDER, f'deleted_{model_name}_{datetime.now().strftime("%Y%m%d_%H%M%S")}')
-                        shutil.copy2(filepath, backup_path)
+                    try:
+                        # บันทึกไฟล์ชั่วคราว
+                        file.save(temp_path)
                         
-                        os.remove(filepath)
+                        # ตรวจสอบความถูกต้องของไฟล์โมเดล
+                        if not is_valid_model_file(temp_path):
+                            raise CustomError('ไฟล์โมเดลไม่ถูกต้องหรือไม่สมบูรณ์')
+                        
+                        # ย้ายไฟล์ไปยังตำแหน่งจริง
+                        final_path = os.path.join(MODEL_FOLDER, filename)
+                        os.replace(temp_path, final_path)
+                        
                         ActivityLog(
                             user=session['username'],
-                            action='delete_model',
-                            details={'model_name': model_name}
+                            action='add_model',
+                            details={'model_name': filename}
                         ).save()
-                        flash('ลบโมเดลสำเร็จ', 'success')
-                    else:
-                        raise CustomError('ไม่พบไฟล์โมเดล')
                         
+                        flash('อัพโหลดโมเดลสำเร็จ', 'success')
+                        
+                    finally:
+                        # ลบไฟล์ชั่วคราวถ้ายังมีอยู่
+                        if os.path.exists(temp_path):
+                            os.remove(temp_path)
+
                 elif action == 'set_active':
                     model_name = request.form.get('model_name')
-                    new_path = os.path.join(MODEL_FOLDER, model_name)
+                    if not model_name:
+                        raise CustomError('ไม่ระบุชื่อโมเดลที่ต้องการใช้งาน')
                     
-                    if not os.path.exists(new_path):
-                        raise CustomError('ไม่พบไฟล์โมเดล')
+                    model_path = os.path.join(MODEL_FOLDER, model_name)
+                    if not os.path.exists(model_path):
+                        raise CustomError('ไม่พบไฟล์โมเดลที่ต้องการใช้งาน')
                     
+                    # โหลดโมเดลใหม่
                     global model, label_encoders, feature_names
-                    model, label_encoders, feature_names = load_model(new_path)
+                    model, label_encoders, feature_names = load_model(model_path)
                     
                     if model is None:
                         raise CustomError('ไม่สามารถโหลดโมเดลได้')
+                    
+                    # อัปเดต MODEL_PATH global
+                    global MODEL_PATH
+                    MODEL_PATH = model_path
                     
                     ActivityLog(
                         user=session['username'],
@@ -385,96 +387,125 @@ def admin_dashboard():
                     ).save()
                     
                     flash('เปลี่ยนโมเดลที่ใช้งานสำเร็จ', 'success')
+
+                elif action == 'add_disease':
+                    thai_name = request.form.get('thai_name')
+                    eng_name = request.form.get('eng_name')
+                    symptoms = request.form.get('symptoms')
+                    prevention = request.form.get('prevention')
+                    severity = request.form.get('severity')
                     
-                elif action in ['add_disease', 'edit_disease', 'delete_disease']:
-                    global diseases_data
+                    if not all([thai_name, eng_name, symptoms, prevention, severity]):
+                        raise CustomError('กรุณากรอกข้อมูลให้ครบถ้วน')
                     
-                    if action == 'add_disease':
-                        disease_name = request.form.get('disease_name')
-                        if disease_name in diseases_data:
-                            raise CustomError('มีข้อมูลโรคนี้อยู่แล้ว')
+                    if thai_name in diseases_data:
+                        raise CustomError('มีข้อมูลโรคนี้อยู่แล้ว')
+                    
+                    diseases_data[thai_name] = {
+                        'ชื่อโรค (ไทย)': thai_name,
+                        'ชื่อโรค (อังกฤษ)': eng_name,
+                        'อาการ': symptoms,
+                        'การควบคุมและป้องกัน': prevention,
+                        'ระดับความรุนแรง': severity,
+                        'last_updated': datetime.now().isoformat(),
+                        'updated_by': session['username']
+                    }
+                    
+                    if save_diseases_data():
+                        ActivityLog(
+                            user=session['username'],
+                            action='add_disease',
+                            details={'disease_name': thai_name}
+                        ).save()
+                        flash('เพิ่มข้อมูลโรคสำเร็จ', 'success')
+                    else:
+                        raise CustomError('ไม่สามารถบันทึกข้อมูลได้')
+
+                elif action == 'edit_disease':
+                    disease_id = request.form.get('disease_id')
+                    thai_name = request.form.get('thai_name')
+                    eng_name = request.form.get('eng_name')
+                    symptoms = request.form.get('symptoms')
+                    prevention = request.form.get('prevention')
+                    severity = request.form.get('severity')
+                    
+                    if not all([disease_id, thai_name, eng_name, symptoms, prevention, severity]):
+                        raise CustomError('กรุณากรอกข้อมูลให้ครบถ้วน')
+                    
+                    try:
+                        disease_keys = list(diseases_data.keys())
+                        old_disease_name = disease_keys[int(disease_id) - 1]
                         
-                        diseases_data[disease_name] = {
-                            'ชื่อโรค (ไทย)': disease_name,
-                            'ชื่อโรค (อังกฤษ)': request.form.get('disease_name_en'),
-                            'อาการ': request.form.get('symptoms'),
-                            'การควบคุมและป้องกัน': request.form.get('prevention'),
-                            'ระดับความรุนแรง': request.form.get('severity'),
+                        # ถ้ามีการเปลี่ยนชื่อโรคและชื่อใหม่มีอยู่แล้ว
+                        if thai_name != old_disease_name and thai_name in diseases_data:
+                            raise CustomError('มีข้อมูลโรคที่ใช้ชื่อนี้อยู่แล้ว')
+                        
+                        # ลบข้อมูลเก่า
+                        if old_disease_name != thai_name:
+                            diseases_data.pop(old_disease_name)
+                        
+                        # เพิ่มหรืออัปเดตข้อมูลใหม่
+                        diseases_data[thai_name] = {
+                            'ชื่อโรค (ไทย)': thai_name,
+                            'ชื่อโรค (อังกฤษ)': eng_name,
+                            'อาการ': symptoms,
+                            'การควบคุมและป้องกัน': prevention,
+                            'ระดับความรุนแรง': severity,
                             'last_updated': datetime.now().isoformat(),
                             'updated_by': session['username']
                         }
                         
-                        ActivityLog(
-                            user=session['username'],
-                            action='add_disease',
-                            details={'disease_name': disease_name}
-                        ).save()
-                        
-                    elif action == 'edit_disease':
-                        index = int(request.form.get('index'))
+                        if save_diseases_data():
+                            ActivityLog(
+                                user=session['username'],
+                                action='edit_disease',
+                                details={'old_name': old_disease_name, 'new_name': thai_name}
+                            ).save()
+                            flash('แก้ไขข้อมูลโรคสำเร็จ', 'success')
+                        else:
+                            raise CustomError('ไม่สามารถบันทึกข้อมูลได้')
+                            
+                    except IndexError:
+                        raise CustomError('ไม่พบข้อมูลโรคที่ต้องการแก้ไข')
+
+                elif action == 'delete_disease':
+                    disease_id = request.form.get('disease_id')
+                    
+                    try:
                         disease_keys = list(diseases_data.keys())
-                        if index >= len(disease_keys):
-                            raise CustomError('ไม่พบข้อมูลโรค')
+                        disease_name = disease_keys[int(disease_id) - 1]
                         
-                        disease_name = disease_keys[index]
-                        diseases_data[disease_name].update({
-                            'ชื่อโรค (ไทย)': request.form.get('disease_name'),
-                            'ชื่อโรค (อังกฤษ)': request.form.get('disease_name_en'),
-                            'อาการ': request.form.get('symptoms'),
-                            'การควบคุมและป้องกัน': request.form.get('prevention'),
-                            'ระดับความรุนแรง': request.form.get('severity'),
-                            'last_updated': datetime.now().isoformat(),
-                            'updated_by': session['username']
-                        })
-                        
-                        ActivityLog(
-                            user=session['username'],
-                            action='edit_disease',
-                            details={'disease_name': disease_name}
-                        ).save()
-                        
-                    elif action == 'delete_disease':
-                        index = int(request.form.get('index'))
-                        disease_keys = list(diseases_data.keys())
-                        if index >= len(disease_keys):
-                            raise CustomError('ไม่พบข้อมูลโรค')
-                        
-                        disease_name = disease_keys[index]
+                        # สำรองข้อมูลก่อนลบ
                         backup = {
                             'deleted_at': datetime.now().isoformat(),
                             'deleted_by': session['username'],
                             'disease_data': diseases_data[disease_name]
                         }
                         
-                        deleted_file = os.path.join(BACKUP_FOLDER, f'deleted_disease_{datetime.now().strftime("%Y%m%d_%H%M%S")}.json')
-                        with open(deleted_file, 'w', encoding='utf-8') as f:
+                        backup_filename = f'deleted_disease_{datetime.now().strftime("%Y%m%d_%H%M%S")}.json'
+                        backup_path = os.path.join(BACKUP_FOLDER, backup_filename)
+                        
+                        with open(backup_path, 'w', encoding='utf-8') as f:
                             json.dump(backup, f, ensure_ascii=False, indent=4)
                         
+                        # ลบข้อมูล
                         del diseases_data[disease_name]
                         
-                        ActivityLog(
-                            user=session['username'],
-                            action='delete_disease',
-                            details={'disease_name': disease_name}
-                        ).save()
-                    
-                    if not save_diseases_data():
-                        raise CustomError('ไม่สามารถบันทึกข้อมูลได้')
-                    
-                    flash('ดำเนินการเกี่ยวกับข้อมูลโรคสำเร็จ', 'success')
-                    
-                elif action == 'backup':
-                    success, result = backup_system()
-                    if success:
-                        ActivityLog(
-                            user=session['username'],
-                            action='create_backup',
-                            details={'backup_path': result}
-                        ).save()
-                        flash(f'สำรองข้อมูลสำเร็จที่ {result}', 'success')
-                    else:
-                        raise CustomError(f'เกิดข้อผิดพลาดในการสำรองข้อมูล: {result}')
-                        
+                        if save_diseases_data():
+                            ActivityLog(
+                                user=session['username'],
+                                action='delete_disease',
+                                details={'disease_name': disease_name, 'backup_file': backup_filename}
+                            ).save()
+                            flash('ลบข้อมูลโรคสำเร็จ', 'success')
+                        else:
+                            # ถ้าบันทึกไม่สำเร็จ ให้กู้คืนข้อมูล
+                            diseases_data[disease_name] = backup['disease_data']
+                            raise CustomError('ไม่สามารถบันทึกการเปลี่ยนแปลงได้')
+                            
+                    except IndexError:
+                        raise CustomError('ไม่พบข้อมูลโรคที่ต้องการลบ')
+
             except CustomError as e:
                 flash(e.message, 'error')
             except Exception as e:
@@ -486,6 +517,7 @@ def admin_dashboard():
         # GET request
         cleanup_old_files(BACKUP_FOLDER, max_age_days=30)
         
+        # รายการโมเดล
         models = []
         if os.path.exists(MODEL_FOLDER):
             for filename in os.listdir(MODEL_FOLDER):
@@ -500,14 +532,15 @@ def admin_dashboard():
                         'size': f"{os.path.getsize(file_path) / (1024*1024):.2f} MB"
                     })
         
+        # รายการโรค
         diseases = [
             {**disease_data, 'key': disease_name} 
             for disease_name, disease_data in diseases_data.items()
         ]
         
+        # สถิติต่างๆ
         stats = {
             'total_models': len(models),
-            'active_models': len([m for m in models if m['status'] == 'active']),
             'total_diseases': len(diseases),
             'disk_usage': {
                 'models': sum(os.path.getsize(os.path.join(MODEL_FOLDER, f)) 
@@ -520,8 +553,7 @@ def admin_dashboard():
         return render_template('admin_dashboard.html',
                              models=models,
                              diseases=diseases,
-                             stats=stats,
-                             current_model=os.path.basename(MODEL_PATH) if model else None)
+                             stats=stats)
                              
     except Exception as e:
         logger.error("Error loading dashboard data", exc_info=True)
