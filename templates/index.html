@@ -12,6 +12,9 @@
     </h1>
 
     <form method="POST" action="{{ url_for('diagnose') }}">
+        <!-- CSRF Token -->
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        
         <!-- ข้อมูลพื้นฐาน -->
         <div class="card">
             <div class="card-header">
@@ -144,8 +147,7 @@
                                 <input type="checkbox" class="btn-check" name="symptoms[]" 
                                        id="symptom-{{ loop.index }}" value="{{ symptom.value }}">
                                 <label class="btn btn-outline-danger" for="symptom-{{ loop.index }}">
-                                    <i class="{{ symptom.icon }}"></i
-                                        {{ symptom.name }}
+                                    <i class="{{ symptom.icon }}"></i>{{ symptom.name }}
                                 </label>
                             </div>
                             {% endfor %}
