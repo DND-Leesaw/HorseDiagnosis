@@ -33,7 +33,7 @@ app.config.update(
     SECRET_KEY=os.getenv('SECRET_KEY'),
     SESSION_TYPE='filesystem',
     PERMANENT_SESSION_LIFETIME=timedelta(minutes=int(os.getenv('SESSION_LIFETIME', 30))),
-    MAX_CONTENT_LENGTH=16 * 1024 * 1024,  # 16MB max file size
+    MAX_CONTENT_LENGTH=100 * 1024 * 1024,  
     UPLOAD_FOLDER=os.getenv('UPLOAD_FOLDER', 'uploads'),
     ENV=os.getenv('FLASK_ENV', 'development'),
     DEBUG=os.getenv('FLASK_ENV', 'development') == 'development',
@@ -631,6 +631,12 @@ def handle_custom_error(error):
 def handle_all_exceptions(e):
     logger.error("Unhandled Exception", exc_info=True)
     return render_template('500.html', error=str(e)), 500
+
+# เพิ่มตรงส่วน Error Handlers
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    flash('ไฟล์มีขนาดใหญ่เกินไป (ขนาดสูงสุด 100MB)', 'error')
+    return redirect(url_for('admin_dashboard'))
 
 if __name__ == '__main__':
     # Initialize required files
