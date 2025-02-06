@@ -794,3 +794,29 @@ jinja2.exceptions.TemplateSyntaxError: Encountered unknown tag 'endfor'. Jinja w
 2025-02-06 04:55:14,892 - werkzeug - INFO -  * Debugger PIN: 278-773-124
 2025-02-06 04:55:24,094 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 04:55:24] "GET / HTTP/1.1" 200 -
 2025-02-06 04:55:24,150 - werkzeug - INFO - 127.0.0.1 - - [06/Feb/2025 04:55:24] "[36mGET /static/style.css HTTP/1.1[0m" 304 -
+2025-02-06 06:58:57,184 - werkzeug - INFO -  * Detected change in 'e:\\HorseDiagnosis\\app.py', reloading
+2025-02-06 06:58:57,475 - werkzeug - INFO -  * Restarting with stat
+2025-02-06 06:59:04,662 - __main__ - INFO - Starting application...
+2025-02-06 06:59:04,662 - __main__ - INFO - Environment: development
+2025-02-06 06:59:04,662 - __main__ - INFO - Debug mode: True
+2025-02-06 06:59:04,662 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-06 06:59:04,674 - werkzeug - WARNING -  * Debugger is active!
+2025-02-06 06:59:04,676 - werkzeug - INFO -  * Debugger PIN: 278-773-124
+2025-02-06 07:26:46,404 - werkzeug - INFO -  * Detected change in 'e:\\HorseDiagnosis\\app.py', reloading
+2025-02-06 07:26:46,583 - werkzeug - INFO -  * Restarting with stat
+2025-02-06 07:26:47,968 - __main__ - INFO - Starting application...
+2025-02-06 07:26:47,968 - __main__ - INFO - Environment: development
+2025-02-06 07:26:47,968 - __main__ - INFO - Debug mode: True
+2025-02-06 07:26:47,978 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-06 07:26:47,983 - werkzeug - WARNING -  * Debugger is active!
+2025-02-06 07:26:47,988 - werkzeug - INFO -  * Debugger PIN: 278-773-124
+2025-02-06 07:27:01,053 - werkzeug - INFO -  * Detected change in 'e:\\HorseDiagnosis\\app.py', reloading
+2025-02-06 07:27:01,441 - werkzeug - INFO -  * Restarting with stat
+2025-02-06 07:27:03,093 - __main__ - INFO - Starting application...
+2025-02-06 07:27:03,093 - __main__ - INFO - Environment: development
+2025-02-06 07:27:03,093 - __main__ - INFO - Debug mode: True
+2025-02-06 07:27:03,093 - __main__ - INFO - Model and disease data loaded successfully
+2025-02-06 07:27:03,103 - werkzeug - WARNING -  * Debugger is active!
+2025-02-06 07:27:03,108 - werkzeug - INFO -  * Debugger PIN: 278-773-124
+2025-02-06 07:36:57,549 - werkzeug - INFO -  * Detected change in 'e:\\HorseDiagnosis\\app.py', reloading
+2025-02-06 07:36:57,715 - werkzeug - INFO -  * Restarting with stat
