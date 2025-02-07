@@ -1,22 +1,31 @@
- name: Auto Deploy to Server
+name: Auto Deploy to Server
 
 on:
   push:
     branches:
-      - main 
+      - main  # เมื่อ push ไปยัง branch main ให้ deploy อัตโนมัติ
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Install Dependencies
+      - name: Set up SSH
         run: |
-          pip install -r requirements.txt
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
-      - name: Restart Server
+      - name: Pull Latest Code & Restart Server
         run: |
-          sudo systemctl restart my-flask-app  # หรือใช้ gunicorn / supervisor
-
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            cd /path/to/your/project  # เปลี่ยนเป็นโฟลเดอร์ของโปรเจกต์
+            git reset --hard
+            git pull origin main  # ดึงไฟล์อัปเดตทั้งหมดจาก GitHub
+            source venv/bin/activate  # เข้า virtual environment
+            pip install -r requirements.txt  # ติดตั้ง dependencies ใหม่ (ถ้ามี)
+            sudo systemctl restart my-flask-app  # รีสตาร์ท Flask App
+          EOF
