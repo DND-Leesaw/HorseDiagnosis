@@ -349,10 +349,11 @@ def admin_dashboard():
                     model_name = request.form.get('model_name')
                     model_path = os.path.join(Config.MODEL_FOLDER, model_name)
                     
-                    if os.path.exists(model_path):
-                        # สำรองข้อมูลก่อนลบ
-                    backup_name = f"backup_{model_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-                    shutil.copy2(model_path, os.path.join(Config.BACKUP_FOLDER, backup_name))
+                     if os.path.exists(model_path):
+                      # สำรองข้อมูลก่อนลบ
+                      backup_name = f"backup_{model_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+                         shutil.copy2(model_path, os.path.join(Config.BACKUP_FOLDER, backup_name))
+
                     
                     os.remove(model_path)
                     activity_logger.log_activity(
