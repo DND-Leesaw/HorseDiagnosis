@@ -3,14 +3,21 @@ name: Auto Deploy to Server
 on:
   push:
     branches:
-      - main  # เมื่อ push ไปยัง branch main ให้ deploy อัตโนมัติ
+      - main
+  workflow_dispatch:  # เพิ่มการ deploy ด้วยตนเอง
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
 
       - name: Set up SSH
         run: |
@@ -19,13 +26,72 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
+      - name: Install dependencies & Run tests
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          # เพิ่มคำสั่งรัน test ถ้ามี
+          # python -m pytest
+
+      - name: Create backup before deploy
+        run: |
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            cd /path/to/your/project
+            timestamp=$(date +%Y%m%d_%H%M%S)
+            tar -czf "../backup_${timestamp}.tar.gz" .
+          EOF
+
       - name: Pull Latest Code & Restart Server
         run: |
           ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
-            cd /path/to/your/project  # เปลี่ยนเป็นโฟลเดอร์ของโปรเจกต์
+            cd /path/to/your/project
+            
+            # Backup current database
+            cp diseases_data.json diseases_data.json.bak
+            
+            # Update code
             git reset --hard
-            git pull origin main  # ดึงไฟล์อัปเดตทั้งหมดจาก GitHub
-            source venv/bin/activate  # เข้า virtual environment
-            pip install -r requirements.txt  # ติดตั้ง dependencies ใหม่ (ถ้ามี)
-            sudo systemctl restart my-flask-app  # รีสตาร์ท Flask App
+            git pull origin main
+            
+            # Setup virtual environment
+            source venv/bin/activate || python -m venv venv && source venv/bin/activate
+            
+            # Install dependencies
+            pip install -r requirements.txt
+            
+            # Create necessary directories
+            mkdir -p models uploads backups logs static tmp
+            
+            # Set permissions
+            chmod -R 755 .
+            chmod 644 diseases_data.json
+            
+            # Restart services
+            sudo systemctl restart my-flask-app
+            
+            # Verify deployment
+            sleep 5
+            if ! curl -s http://localhost:5000/health; then
+              # Rollback if deployment fails
+              git reset --hard HEAD^
+              cp diseases_data.json.bak diseases_data.json
+              sudo systemctl restart my-flask-app
+              exit 1
+            fi
           EOF
+
+      - name: Cleanup old backups
+        if: success()
+        run: |
+          ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+            cd /path/to/your/project
+            find ../backup_* -mtime +7 -delete
+            find . -name "*.bak" -mtime +7 -delete
+          EOF
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          curl -X POST ${{ secrets.NOTIFY_URL }} \
+            -H 'Content-Type: application/json' \
+            -d '{"text":"❌ Deployment failed! Please check GitHub Actions for details."}'

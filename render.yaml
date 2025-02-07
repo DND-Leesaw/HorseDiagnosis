@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: horse-diagnosis
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.0
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WTF_CSRF_SECRET_KEY
+        generateValue: true
+      - key: GITHUB_SECRET
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD_HASH
+        sync: false
+    autoDeploy: true
+    healthCheckPath: /health

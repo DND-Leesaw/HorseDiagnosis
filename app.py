@@ -1,8 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, session
-from flask_wtf.csrf import CSRFProtect
+from flask_wtf.csrf import CSRFProtect, CSRFError
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from functools import wraps
+from flask_wtf import FlaskForm
+from wtforms import StringField, TextAreaField, SelectField
+from wtforms.validators import DataRequired
+from functools import wraps, lru_cache
 import pandas as pd
 import numpy as np
 import joblib
@@ -13,111 +16,188 @@ import json
 import shutil
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+import hashlib
+import hmac
 import traceback
 
-# ตั้งค่า logging
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler('app.log', encoding='utf-8'),
-        logging.StreamHandler()
-    ]
-)
-logger = logging.getLogger(__name__)
-
-# สร้าง Flask app
+# Initialize Flask app
 app = Flask(__name__)
 
-app.config.update(
-    SECRET_KEY=os.getenv('SECRET_KEY'),
-    SESSION_TYPE='filesystem',
-    PERMANENT_SESSION_LIFETIME=timedelta(minutes=int(os.getenv('SESSION_LIFETIME', 30))),
-    MAX_CONTENT_LENGTH=100 * 1024 * 1024,  
-    UPLOAD_FOLDER=os.getenv('UPLOAD_FOLDER', 'uploads'),
-    ENV=os.getenv('FLASK_ENV', 'development'),
-    DEBUG=os.getenv('FLASK_ENV', 'development') == 'development',
-    WTF_CSRF_SECRET_KEY=os.getenv('WTF_CSRF_SECRET_KEY'),
-    WTF_CSRF_TIME_LIMIT=None,
-    SQLALCHEMY_DATABASE_URI=os.getenv('DATABASE_URL', 'sqlite:///your_database.db'),
-    SQLALCHEMY_TRACK_MODIFICATIONS=False
-)
+# Load config
+class Config:
+    SECRET_KEY = os.getenv('SECRET_KEY', 'your-secret-key')
+    WTF_CSRF_SECRET_KEY = os.getenv('WTF_CSRF_SECRET_KEY', 'your-csrf-secret-key')
+    SESSION_TYPE = 'filesystem'
+    PERMANENT_SESSION_LIFETIME = timedelta(minutes=int(os.getenv('SESSION_LIFETIME', 30)))
+    MAX_CONTENT_LENGTH = 100 * 1024 * 1024  # 100MB max file size
+    UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER', 'uploads')
+    MODEL_FOLDER = 'models'
+    BACKUP_FOLDER = 'backups'
+    LOG_FOLDER = 'logs'
+    DEBUG = os.getenv('FLASK_DEBUG', 'False').lower() in ('true', '1', 't')
+    ENV = os.getenv('FLASK_ENV', 'production')
+    GITHUB_SECRET = os.getenv('GITHUB_SECRET', None)
 
-# ตั้งค่า CSRF protection
-csrf = CSRFProtect()
-csrf.init_app(app)
+app.config.from_object(Config)
 
-# ตั้งค่า Rate Limiting
-limiter = Limiter(
-    app=app,
-    key_func=get_remote_address,
-    default_limits=["200 per day", "50 per hour"]
-)
+# Initialize extensions
+csrf = CSRFProtect(app)
+limiter = Limiter(app=app, key_func=get_remote_address)
 
 # Constants
 ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
 ADMIN_PASSWORD_HASH = os.getenv('ADMIN_PASSWORD_HASH', generate_password_hash('admin'))
-MODEL_FOLDER = 'models'
-BACKUP_FOLDER = 'backups'
-ALLOWED_EXTENSIONS = {'joblib', 'pkl'}
 MODEL_FILENAME = 'horse_disease_model.joblib'
-MODEL_PATH = os.path.join(MODEL_FOLDER, MODEL_FILENAME)
+MODEL_PATH = os.path.join(Config.MODEL_FOLDER, MODEL_FILENAME)
+ALLOWED_EXTENSIONS = {'joblib', 'pkl'}
 
-# สร้างโฟลเดอร์ที่จำเป็น
-for folder in [MODEL_FOLDER, 'static', BACKUP_FOLDER, app.config['UPLOAD_FOLDER'], 'logs']:
+# Create required folders
+for folder in [Config.MODEL_FOLDER, 'static', Config.BACKUP_FOLDER, Config.UPLOAD_FOLDER, Config.LOG_FOLDER]:
     os.makedirs(folder, exist_ok=True)
 
-# Custom Exceptions
-class CustomError(Exception):
-    def __init__(self, message, status_code=400):
-        self.message = message
-        self.status_code = status_code
+# Utility Classes
+class ModelManager:
+    def __init__(self, model_folder, backup_folder):
+        self.model_folder = model_folder
+        self.backup_folder = backup_folder
+        
+    def list_models(self):
+        models = []
+        if os.path.exists(self.model_folder):
+            for filename in os.listdir(self.model_folder):
+                if filename.endswith(('.joblib', '.pkl')):
+                    file_path = os.path.join(self.model_folder, filename)
+                    models.append({
+                        'model_name': filename,
+                        'upload_date': datetime.fromtimestamp(
+                            os.path.getctime(file_path)
+                        ).strftime('%Y-%m-%d %H:%M:%S'),
+                        'status': 'active' if filename == os.path.basename(MODEL_PATH) else 'inactive',
+                        'size': f"{os.path.getsize(file_path) / (1024*1024):.2f} MB"
+                    })
+        return sorted(models, key=lambda x: x['upload_date'], reverse=True)
 
-# Activity Logger
-class ActivityLog:
-    def __init__(self, user, action, details=None):
-        self.timestamp = datetime.now()
-        self.user = user
-        self.action = action
-        self.details = details
-
-    def save(self):
+    def validate_model(self, model_path):
         try:
-            log_entry = {
-                'timestamp': self.timestamp.isoformat(),
-                'user': self.user,
-                'action': self.action,
-                'details': self.details,
-                'ip': request.remote_addr
-            }
-            log_file = os.path.join('logs', f'activity_{self.timestamp.strftime("%Y%m")}.json')
+            model_data = joblib.load(model_path)
+            required_keys = ['model', 'label_encoders', 'feature_names']
+            return all(key in model_data for key in required_keys)
+        except Exception as e:
+            logger.error(f"Model validation failed: {str(e)}")
+            return False
+
+class FileManager:
+    def __init__(self, upload_folder, backup_folder):
+        self.upload_folder = upload_folder
+        self.backup_folder = backup_folder
+        
+    def save_file(self, file, filename, subfolder=None):
+        if subfolder:
+            save_path = os.path.join(self.upload_folder, subfolder)
+            os.makedirs(save_path, exist_ok=True)
+        else:
+            save_path = self.upload_folder
             
+        temp_name = f'temp_{filename}'
+        temp_path = os.path.join(save_path, temp_name)
+        final_path = os.path.join(save_path, filename)
+        
+        try:
+            file.save(temp_path)
+            os.replace(temp_path, final_path)
+            return final_path
+        except Exception as e:
+            if os.path.exists(temp_path):
+                os.remove(temp_path)
+            raise e
+
+    def get_folder_size(self, folder):
+        total_size = 0
+        for dirpath, dirnames, filenames in os.walk(folder):
+            for filename in filenames:
+                filepath = os.path.join(dirpath, filename)
+                total_size += os.path.getsize(filepath)
+        return total_size
+
+class ActivityLogger:
+    def __init__(self, log_folder):
+        self.log_folder = log_folder
+        self.setup_logging()
+        
+    def setup_logging(self):
+        os.makedirs(self.log_folder, exist_ok=True)
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler(
+                    os.path.join(self.log_folder, 'app.log'),
+                    encoding='utf-8'
+                ),
+                logging.StreamHandler()
+            ]
+        )
+        self.logger = logging.getLogger('app_activity')
+
+    def log_activity(self, user, action, details=None):
+        log_entry = {
+            'timestamp': datetime.now().isoformat(),
+            'user': user,
+            'action': action,
+            'details': details,
+            'ip': request.remote_addr if request else None
+        }
+        
+        log_file = os.path.join(
+            self.log_folder,
+            f'activity_{datetime.now().strftime("%Y%m")}.json'
+        )
+        
+        try:
             existing_logs = []
             if os.path.exists(log_file):
                 with open(log_file, 'r', encoding='utf-8') as f:
                     existing_logs = json.load(f)
-            
+                    
             existing_logs.append(log_entry)
             
             with open(log_file, 'w', encoding='utf-8') as f:
                 json.dump(existing_logs, f, ensure_ascii=False, indent=2)
+                
+            self.logger.info(f"Activity: {action}, User: {user}, Details: {details}")
+            
         except Exception as e:
-            logger.error(f"Failed to save activity log: {str(e)}")
+            self.logger.error(f"Failed to log activity: {str(e)}")
+
+# Initialize managers
+model_manager = ModelManager(Config.MODEL_FOLDER, Config.BACKUP_FOLDER)
+file_manager = FileManager(Config.UPLOAD_FOLDER, Config.BACKUP_FOLDER)
+activity_logger = ActivityLogger(Config.LOG_FOLDER)
+logger = logging.getLogger(__name__)
+
+# Forms
+class DiseaseForm(FlaskForm):
+    thai_name = StringField('ชื่อโรค (ไทย)', validators=[DataRequired()])
+    eng_name = StringField('ชื่อโรค (อังกฤษ)', validators=[DataRequired()])
+    symptoms = TextAreaField('อาการ', validators=[DataRequired()])
+    prevention = TextAreaField('การควบคุมและป้องกัน', validators=[DataRequired()])
+    severity = SelectField('ระดับความรุนแรง',
+                         choices=[('ต่ำ', 'ต่ำ'), ('กลาง', 'กลาง'), ('สูง', 'สูง')],
+                         validators=[DataRequired()])
 
 # Utility Functions
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def handle_error(e, message="เกิดข้อผิดพลาด", log_level=logging.ERROR):
-    logger.log(log_level, f"{message}: {str(e)}", exc_info=True)
-    flash(message, 'error')
-
-def validate_model_file(file):
-    if not file:
-        raise CustomError('ไม่พบไฟล์ที่อัปโหลด')
-    if not allowed_file(file.filename):
-        raise CustomError('ประเภทไฟล์ไม่ถูกต้อง')
-    return True
+@lru_cache(maxsize=1)
+def load_model(model_path=MODEL_PATH):
+    if os.path.exists(model_path):
+        try:
+            model_data = joblib.load(model_path)
+            return model_data['model'], model_data['label_encoders'], model_data['feature_names']
+        except Exception as e:
+            logger.error(f"Error loading model: {str(e)}", exc_info=True)
+    return None, None, None
 
 def load_diseases_data():
     try:
@@ -127,38 +207,8 @@ def load_diseases_data():
         with open('diseases_data.json', 'r', encoding='utf-8') as f:
             return json.load(f)
     except Exception as e:
-        handle_error(e, "ไม่สามารถโหลดข้อมูลโรคได้")
+        logger.error(f"Error loading diseases data: {str(e)}")
         return {}
-
-def save_diseases_data():
-    try:
-        temp_file = 'diseases_data.json.tmp'
-        with open(temp_file, 'w', encoding='utf-8') as f:
-            json.dump(diseases_data, f, ensure_ascii=False, indent=4)
-        os.replace(temp_file, 'diseases_data.json')
-        return True
-    except Exception as e:
-        if os.path.exists(temp_file):
-            os.remove(temp_file)
-        handle_error(e, "ไม่สามารถบันทึกข้อมูลโรคได้")
-        return False
-
-def is_valid_model_file(file_path):
-    try:
-        test_model = joblib.load(file_path)
-        required_keys = ['model', 'label_encoders', 'feature_names']
-        return all(key in test_model for key in required_keys)
-    except Exception:
-        return False
-
-def load_model(model_path=MODEL_PATH):
-    if os.path.exists(model_path):
-        try:
-            model_data = joblib.load(model_path)
-            return model_data['model'], model_data['label_encoders'], model_data['feature_names']
-        except Exception as e:
-            logger.error(f"เกิดข้อผิดพลาดในการโหลดโมเดล: {str(e)}", exc_info=True)
-    return None, None, None
 
 def process_input_data(input_data, label_encoders, feature_names):
     try:
@@ -170,54 +220,8 @@ def process_input_data(input_data, label_encoders, feature_names):
             processed_data.append(value)
         return processed_data
     except Exception as e:
-        logger.error(f"Error processing input data: {str(e)}", exc_info=True)
-        raise CustomError("เกิดข้อผิดพลาดในการประมวลผลข้อมูล")
-
-def cleanup_old_files(folder, max_age_days=30):
-    try:
-        cutoff = datetime.now() - timedelta(days=max_age_days)
-        for filename in os.listdir(folder):
-            filepath = os.path.join(folder, filename)
-            if os.path.getctime(filepath) < cutoff.timestamp():
-                if os.path.isfile(filepath):
-                    os.remove(filepath)
-                elif os.path.isdir(filepath):
-                    shutil.rmtree(filepath)
-    except Exception as e:
-        logger.error(f"Error cleaning up old files: {str(e)}")
-
-def backup_system():
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
-    backup_dir = os.path.join(BACKUP_FOLDER, f'backup_{timestamp}')
-    
-    try:
-        os.makedirs(backup_dir, exist_ok=True)
-        
-        if os.path.exists(MODEL_FOLDER):
-            shutil.copytree(MODEL_FOLDER, os.path.join(backup_dir, 'models'))
-        
-        if os.path.exists('diseases_data.json'):
-            shutil.copy2('diseases_data.json', backup_dir)
-            
-        if os.path.exists('logs'):
-            shutil.copytree('logs', os.path.join(backup_dir, 'logs'))
-            
-        backup_info = {
-            'timestamp': timestamp,
-            'models_count': len(os.listdir(MODEL_FOLDER)) if os.path.exists(MODEL_FOLDER) else 0,
-            'diseases_count': len(diseases_data),
-            'backup_size': sum(os.path.getsize(os.path.join(dirpath, filename))
-                             for dirpath, _, filenames in os.walk(backup_dir)
-                             for filename in filenames)
-        }
-        
-        with open(os.path.join(backup_dir, 'backup_info.json'), 'w', encoding='utf-8') as f:
-            json.dump(backup_info, f, ensure_ascii=False, indent=2)
-            
-        return True, backup_dir
-    except Exception as e:
-        logger.error(f"Backup failed: {str(e)}")
-        return False, str(e)
+        logger.error(f"Error processing input data: {str(e)}")
+        raise e
 
 # Decorators
 def login_required(f):
@@ -233,36 +237,14 @@ def login_required(f):
 model, label_encoders, feature_names = load_model()
 diseases_data = load_diseases_data()
 
-# Security Middleware
-@app.before_request
-def before_request():
-    if not request.is_secure and app.env != 'development':
-        url = request.url.replace('http://', 'https://', 1)
-        return redirect(url, code=301)
-
-@app.after_request
-def after_request(response):
-    response.headers['X-Content-Type-Options'] = 'nosniff'
-    response.headers['X-Frame-Options'] = 'SAMEORIGIN'
-    response.headers['X-XSS-Protection'] = '1; mode=block'
-    return response
-
 # Routes
 @app.route('/')
 def home():
-    try:
-        return render_template('index.html')
-    except Exception as e:
-        logger.error(f"Error in home route: {str(e)}", exc_info=True)
-        return render_template('500.html', error=str(e)), 500
+    return render_template('index.html')
 
 @app.route('/about')
 def about():
-    try:
-        return render_template('about.html')
-    except Exception as e:
-        logger.error(f"Error in about route: {str(e)}", exc_info=True)
-        return render_template('500.html', error=str(e)), 500
+    return render_template('about.html')
 
 @app.route('/admin/login', methods=['GET', 'POST'])
 @limiter.limit("5 per minute")
@@ -281,170 +263,116 @@ def admin_login():
                 session['username'] = username
                 session.permanent = True
                 
-                ActivityLog(
-                    user=username,
-                    action='login',
-                    details={'ip': request.remote_addr}
-                ).save()
+                activity_logger.log_activity(
+                    username,
+                    'login',
+                    {'ip': request.remote_addr}
+                )
                 
-                logger.info(f"ผู้ใช้ {username} เข้าสู่ระบบสำเร็จ")
                 flash('เข้าสู่ระบบสำเร็จ', 'success')
                 return redirect(url_for('admin_dashboard'))
             else:
-                logger.warning(f'การเข้าสู่ระบบล้มเหลว สำหรับผู้ใช้: {username}')
+                logger.warning(f'Login failed for user: {username}')
                 flash('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง', 'error')
                 
         except Exception as e:
-            logger.error(f"Error in login: {str(e)}", exc_info=True)
+            logger.error(f"Error in login: {str(e)}")
             flash('เกิดข้อผิดพลาดในการเข้าสู่ระบบ', 'error')
     
     return render_template('admin_login.html')
 
-@app.route('/admin/logout', methods=['GET', 'POST'])
+@app.route('/admin/logout')
 def admin_logout():
     if session.get('username'):
-        ActivityLog(
-            user=session['username'],
-            action='logout'
-        ).save()
-    
+        activity_logger.log_activity(
+            session['username'],
+            'logout'
+        )
     session.clear()
-    flash('คุณได้ออกจากระบบแล้ว', 'success')
+    flash('ออกจากระบบสำเร็จ', 'success')
     return redirect(url_for('home'))
 
 @app.route('/admin/dashboard', methods=['GET', 'POST'])
 @login_required
 def admin_dashboard():
     try:
+        form = DiseaseForm()
+        
         if request.method == 'POST':
             action = request.form.get('action')
             
             try:
                 if action == 'add_model':
-                    # ตรวจสอบไฟล์ที่อัพโหลด
                     if 'model_file' not in request.files:
-                        raise CustomError('กรุณาเลือกไฟล์โมเดล')
+                        raise ValueError('กรุณาเลือกไฟล์โมเดล')
                     
                     file = request.files['model_file']
                     if not file or not file.filename:
-                        raise CustomError('ไม่พบไฟล์ที่อัพโหลด')
-                    
+                        raise ValueError('ไม่พบไฟล์ที่อัพโหลด')
+                        
                     if not allowed_file(file.filename):
-                        raise CustomError('รองรับเฉพาะไฟล์ .joblib และ .pkl เท่านั้น')
-                    
+                        raise ValueError('รองรับเฉพาะไฟล์ .joblib และ .pkl เท่านั้น')
+                        
                     filename = secure_filename(file.filename)
-                    temp_path = os.path.join(MODEL_FOLDER, f'temp_{filename}')
+                    filepath = file_manager.save_file(file, filename, 'models')
                     
-                    try:
-                        # บันทึกไฟล์ชั่วคราว
-                        file.save(temp_path)
+                    if not model_manager.validate_model(filepath):
+                        os.remove(filepath)
+                        raise ValueError('ไฟล์โมเดลไม่ถูกต้อง')
                         
-                        # ตรวจสอบความถูกต้องของไฟล์โมเดล
-                        if not is_valid_model_file(temp_path):
-                            raise CustomError('ไฟล์โมเดลไม่ถูกต้องหรือไม่สมบูรณ์')
-                        
-                        # ย้ายไฟล์ไปยังตำแหน่งจริง
-                        final_path = os.path.join(MODEL_FOLDER, filename)
-                        os.replace(temp_path, final_path)
-                        
-                        ActivityLog(
-                            user=session['username'],
-                            action='add_model',
-                            details={'model_name': filename}
-                        ).save()
-                        
-                        flash('อัพโหลดโมเดลสำเร็จ', 'success')
-                        
-                    finally:
-                        # ลบไฟล์ชั่วคราวถ้ายังมีอยู่
-                        if os.path.exists(temp_path):
-                            os.remove(temp_path)
-
+                    activity_logger.log_activity(
+                        session['username'],
+                        'upload_model',
+                        {'model_name': filename}
+                    )
+                    flash('อัพโหลดโมเดลสำเร็จ', 'success')
+                    
                 elif action == 'set_active':
                     model_name = request.form.get('model_name')
-                    if not model_name:
-                        raise CustomError('ไม่ระบุชื่อโมเดลที่ต้องการใช้งาน')
+                    model_path = os.path.join(Config.MODEL_FOLDER, model_name)
                     
-                    model_path = os.path.join(MODEL_FOLDER, model_name)
-                    if not os.path.exists(model_path):
-                        raise CustomError('ไม่พบไฟล์โมเดลที่ต้องการใช้งาน')
-                    
-                    # โหลดโมเดลใหม่
-                    global model, label_encoders, feature_names
+                    global model, label_encoders, feature_names, MODEL_PATH
                     model, label_encoders, feature_names = load_model(model_path)
                     
                     if model is None:
-                        raise CustomError('ไม่สามารถโหลดโมเดลได้')
-                    
-                    # อัปเดต MODEL_PATH global
-                    global MODEL_PATH
+                        raise ValueError('ไม่สามารถโหลดโมเดลได้')
+                        
                     MODEL_PATH = model_path
-                    
-                    ActivityLog(
-                        user=session['username'],
-                        action='set_active_model',
-                        details={'model_name': model_name}
-                    ).save()
-                    
+                    activity_logger.log_activity(
+                        session['username'],
+                        'activate_model',
+                        {'model_name': model_name}
+                    )
                     flash('เปลี่ยนโมเดลที่ใช้งานสำเร็จ', 'success')
-
+                    
+                elif action == 'delete_model':
+                    model_name = request.form.get('model_name')
+                    model_path = os.path.join(Config.MODEL_FOLDER, model_name)
+                    
+                    if os.path.exists(model_path):
+                        # สำรองข้อมูลก่อนลบ
+                    backup_name = f"backup_{model_name}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+                    shutil.copy2(model_path, os.path.join(Config.BACKUP_FOLDER, backup_name))
+                    
+                    os.remove(model_path)
+                    activity_logger.log_activity(
+                        session['username'],
+                        'delete_model',
+                        {'model_name': model_name}
+                    )
+                    flash('ลบโมเดลสำเร็จ', 'success')
+                
                 elif action == 'add_disease':
-                    thai_name = request.form.get('thai_name')
-                    eng_name = request.form.get('eng_name')
-                    symptoms = request.form.get('symptoms')
-                    prevention = request.form.get('prevention')
-                    severity = request.form.get('severity')
-                    
-                    if not all([thai_name, eng_name, symptoms, prevention, severity]):
-                        raise CustomError('กรุณากรอกข้อมูลให้ครบถ้วน')
-                    
-                    if thai_name in diseases_data:
-                        raise CustomError('มีข้อมูลโรคนี้อยู่แล้ว')
-                    
-                    diseases_data[thai_name] = {
-                        'ชื่อโรค (ไทย)': thai_name,
-                        'ชื่อโรค (อังกฤษ)': eng_name,
-                        'อาการ': symptoms,
-                        'การควบคุมและป้องกัน': prevention,
-                        'ระดับความรุนแรง': severity,
-                        'last_updated': datetime.now().isoformat(),
-                        'updated_by': session['username']
-                    }
-                    
-                    if save_diseases_data():
-                        ActivityLog(
-                            user=session['username'],
-                            action='add_disease',
-                            details={'disease_name': thai_name}
-                        ).save()
-                        flash('เพิ่มข้อมูลโรคสำเร็จ', 'success')
-                    else:
-                        raise CustomError('ไม่สามารถบันทึกข้อมูลได้')
-
-                elif action == 'edit_disease':
-                    disease_id = request.form.get('disease_id')
-                    thai_name = request.form.get('thai_name')
-                    eng_name = request.form.get('eng_name')
-                    symptoms = request.form.get('symptoms')
-                    prevention = request.form.get('prevention')
-                    severity = request.form.get('severity')
-                    
-                    if not all([disease_id, thai_name, eng_name, symptoms, prevention, severity]):
-                        raise CustomError('กรุณากรอกข้อมูลให้ครบถ้วน')
-                    
-                    try:
-                        disease_keys = list(diseases_data.keys())
-                        old_disease_name = disease_keys[int(disease_id) - 1]
+                    if form.validate_on_submit():
+                        thai_name = form.thai_name.data
+                        eng_name = form.eng_name.data
+                        symptoms = form.symptoms.data
+                        prevention = form.prevention.data
+                        severity = form.severity.data
                         
-                        # ถ้ามีการเปลี่ยนชื่อโรคและชื่อใหม่มีอยู่แล้ว
-                        if thai_name != old_disease_name and thai_name in diseases_data:
-                            raise CustomError('มีข้อมูลโรคที่ใช้ชื่อนี้อยู่แล้ว')
-                        
-                        # ลบข้อมูลเก่า
-                        if old_disease_name != thai_name:
-                            diseases_data.pop(old_disease_name)
-                        
-                        # เพิ่มหรืออัปเดตข้อมูลใหม่
+                        if thai_name in diseases_data:
+                            raise ValueError('มีข้อมูลโรคนี้อยู่แล้ว')
+                            
                         diseases_data[thai_name] = {
                             'ชื่อโรค (ไทย)': thai_name,
                             'ชื่อโรค (อังกฤษ)': eng_name,
@@ -455,114 +383,134 @@ def admin_dashboard():
                             'updated_by': session['username']
                         }
                         
-                        if save_diseases_data():
-                            ActivityLog(
-                                user=session['username'],
-                                action='edit_disease',
-                                details={'old_name': old_disease_name, 'new_name': thai_name}
-                            ).save()
-                            flash('แก้ไขข้อมูลโรคสำเร็จ', 'success')
-                        else:
-                            raise CustomError('ไม่สามารถบันทึกข้อมูลได้')
+                        with open('diseases_data.json', 'w', encoding='utf-8') as f:
+                            json.dump(diseases_data, f, ensure_ascii=False, indent=4)
                             
-                    except IndexError:
-                        raise CustomError('ไม่พบข้อมูลโรคที่ต้องการแก้ไข')
-
+                        activity_logger.log_activity(
+                            session['username'],
+                            'add_disease',
+                            {'disease_name': thai_name}
+                        )
+                        flash('เพิ่มข้อมูลโรคสำเร็จ', 'success')
+                    else:
+                        for field, errors in form.errors.items():
+                            for error in errors:
+                                flash(f"{getattr(form, field).label.text}: {error}", 'error')
+                                
+                elif action == 'edit_disease':
+                    disease_id = request.form.get('disease_id')
+                    thai_name = request.form.get('thai_name')
+                    eng_name = request.form.get('eng_name')
+                    symptoms = request.form.get('symptoms')
+                    prevention = request.form.get('prevention')
+                    severity = request.form.get('severity')
+                    
+                    if not all([disease_id, thai_name, eng_name, symptoms, prevention, severity]):
+                        raise ValueError('กรุณากรอกข้อมูลให้ครบถ้วน')
+                        
+                    disease_keys = list(diseases_data.keys())
+                    old_disease_name = disease_keys[int(disease_id) - 1]
+                    
+                    # สำรองข้อมูลก่อนแก้ไข
+                    backup = {
+                        'edited_at': datetime.now().isoformat(),
+                        'edited_by': session['username'],
+                        'old_data': diseases_data[old_disease_name]
+                    }
+                    
+                    backup_filename = f'edited_disease_{datetime.now().strftime("%Y%m%d_%H%M%S")}.json'
+                    with open(os.path.join(Config.BACKUP_FOLDER, backup_filename), 'w', encoding='utf-8') as f:
+                        json.dump(backup, f, ensure_ascii=False, indent=4)
+                    
+                    # อัปเดตข้อมูล
+                    if old_disease_name != thai_name:
+                        del diseases_data[old_disease_name]
+                        
+                    diseases_data[thai_name] = {
+                        'ชื่อโรค (ไทย)': thai_name,
+                        'ชื่อโรค (อังกฤษ)': eng_name,
+                        'อาการ': symptoms,
+                        'การควบคุมและป้องกัน': prevention,
+                        'ระดับความรุนแรง': severity,
+                        'last_updated': datetime.now().isoformat(),
+                        'updated_by': session['username']
+                    }
+                    
+                    with open('diseases_data.json', 'w', encoding='utf-8') as f:
+                        json.dump(diseases_data, f, ensure_ascii=False, indent=4)
+                        
+                    activity_logger.log_activity(
+                        session['username'],
+                        'edit_disease',
+                        {
+                            'old_name': old_disease_name,
+                            'new_name': thai_name
+                        }
+                    )
+                    flash('แก้ไขข้อมูลโรคสำเร็จ', 'success')
+                    
                 elif action == 'delete_disease':
                     disease_id = request.form.get('disease_id')
+                    disease_keys = list(diseases_data.keys())
+                    disease_name = disease_keys[int(disease_id) - 1]
                     
-                    try:
-                        disease_keys = list(diseases_data.keys())
-                        disease_name = disease_keys[int(disease_id) - 1]
+                    # สำรองข้อมูลก่อนลบ
+                    backup = {
+                        'deleted_at': datetime.now().isoformat(),
+                        'deleted_by': session['username'],
+                        'disease_data': diseases_data[disease_name]
+                    }
+                    
+                    backup_filename = f'deleted_disease_{datetime.now().strftime("%Y%m%d_%H%M%S")}.json'
+                    with open(os.path.join(Config.BACKUP_FOLDER, backup_filename), 'w', encoding='utf-8') as f:
+                        json.dump(backup, f, ensure_ascii=False, indent=4)
+                    
+                    del diseases_data[disease_name]
+                    with open('diseases_data.json', 'w', encoding='utf-8') as f:
+                        json.dump(diseases_data, f, ensure_ascii=False, indent=4)
                         
-                        # สำรองข้อมูลก่อนลบ
-                        backup = {
-                            'deleted_at': datetime.now().isoformat(),
-                            'deleted_by': session['username'],
-                            'disease_data': diseases_data[disease_name]
-                        }
-                        
-                        backup_filename = f'deleted_disease_{datetime.now().strftime("%Y%m%d_%H%M%S")}.json'
-                        backup_path = os.path.join(BACKUP_FOLDER, backup_filename)
-                        
-                        with open(backup_path, 'w', encoding='utf-8') as f:
-                            json.dump(backup, f, ensure_ascii=False, indent=4)
-                        
-                        # ลบข้อมูล
-                        del diseases_data[disease_name]
-                        
-                        if save_diseases_data():
-                            ActivityLog(
-                                user=session['username'],
-                                action='delete_disease',
-                                details={'disease_name': disease_name, 'backup_file': backup_filename}
-                            ).save()
-                            flash('ลบข้อมูลโรคสำเร็จ', 'success')
-                        else:
-                            # ถ้าบันทึกไม่สำเร็จ ให้กู้คืนข้อมูล
-                            diseases_data[disease_name] = backup['disease_data']
-                            raise CustomError('ไม่สามารถบันทึกการเปลี่ยนแปลงได้')
-                            
-                    except IndexError:
-                        raise CustomError('ไม่พบข้อมูลโรคที่ต้องการลบ')
-
-            except CustomError as e:
-                flash(e.message, 'error')
+                    activity_logger.log_activity(
+                        session['username'],
+                        'delete_disease',
+                        {'disease_name': disease_name}
+                    )
+                    flash('ลบข้อมูลโรคสำเร็จ', 'success')
+                    
             except Exception as e:
-                logger.error(f"Error in dashboard action {action}: {str(e)}", exc_info=True)
-                flash('เกิดข้อผิดพลาดที่ไม่คาดคิด', 'error')
-            
+                logger.error(f"Error in dashboard action {action}: {str(e)}")
+                flash(str(e), 'error')
+                
             return redirect(url_for('admin_dashboard'))
-        
+            
         # GET request
-        cleanup_old_files(BACKUP_FOLDER, max_age_days=30)
-        
-        # รายการโมเดล
-        models = []
-        if os.path.exists(MODEL_FOLDER):
-            for filename in os.listdir(MODEL_FOLDER):
-                if filename.endswith(('.joblib', '.pkl')):
-                    file_path = os.path.join(MODEL_FOLDER, filename)
-                    models.append({
-                        'model_name': filename,
-                        'upload_date': datetime.fromtimestamp(
-                            os.path.getctime(file_path)
-                        ).strftime('%Y-%m-%d %H:%M:%S'),
-                        'status': 'active' if filename == os.path.basename(MODEL_PATH) else 'inactive',
-                        'size': f"{os.path.getsize(file_path) / (1024*1024):.2f} MB"
-                    })
-        
-        # รายการโรค
-        diseases = [
-            {**disease_data, 'key': disease_name} 
-            for disease_name, disease_data in diseases_data.items()
-        ]
-        
-        # สถิติต่างๆ
+        models = model_manager.list_models()
         stats = {
             'total_models': len(models),
-            'total_diseases': len(diseases),
+            'active_models': len([m for m in models if m['status'] == 'active']),
+            'total_diseases': len(diseases_data),
             'disk_usage': {
-                'models': sum(os.path.getsize(os.path.join(MODEL_FOLDER, f)) 
-                            for f in os.listdir(MODEL_FOLDER)) / (1024*1024) if os.path.exists(MODEL_FOLDER) else 0,
-                'backups': sum(os.path.getsize(os.path.join(BACKUP_FOLDER, f)) 
-                             for f in os.listdir(BACKUP_FOLDER)) / (1024*1024) if os.path.exists(BACKUP_FOLDER) else 0
+                'models': file_manager.get_folder_size(Config.MODEL_FOLDER) / (1024*1024),
+                'backups': file_manager.get_folder_size(Config.BACKUP_FOLDER) / (1024*1024)
             }
         }
         
         return render_template('admin_dashboard.html',
                              models=models,
-                             diseases=diseases,
-                             stats=stats)
+                             diseases=diseases_data,
+                             stats=stats,
+                             form=form)
                              
     except Exception as e:
-        logger.error("Error loading dashboard data", exc_info=True)
+        logger.error(f"Error loading dashboard: {str(e)}")
         flash('เกิดข้อผิดพลาดในการโหลดข้อมูล', 'error')
-        return render_template('admin_dashboard.html')
+        return render_template('admin_dashboard.html', form=form)
 
 @app.route('/diagnose', methods=['POST'])
 def diagnose():
     try:
+        if not request.form:
+            raise ValueError("ไม่พบข้อมูลที่ส่งมา")
+            
         input_data = {
             'gender': request.form.get('gender'),
             'age': request.form.get('age'),
@@ -571,46 +519,52 @@ def diagnose():
             'symptoms': request.form.getlist('symptoms[]')
         }
 
-        if not all(input_data.values()):
-            raise CustomError('กรุณากรอกข้อมูลให้ครบถ้วน')
+        if not all([input_data['gender'], input_data['age'], 
+                   input_data['behavior'], input_data['environment']]):
+            raise ValueError('กรุณากรอกข้อมูลให้ครบถ้วน')
+
+        if not input_data['symptoms']:
+            raise ValueError('กรุณาเลือกอาการอย่างน้อย 1 อาการ')
 
         if model is None:
-            raise CustomError('ไม่พบโมเดลที่พร้อมใช้งาน')
+            raise ValueError('ไม่พบโมเดลที่พร้อมใช้งาน')
             
         processed_data = process_input_data(input_data, label_encoders, feature_names)
+        prediction_probas = model.predict_proba([processed_data])[0]
+        predicted_class = model.classes_[np.argmax(prediction_probas)]
         
-        try:
-            prediction_probas = model.predict_proba([processed_data])[0]
-            predicted_class = model.predict([processed_data])[0]
-            
-            top_3_indices = np.argsort(prediction_probas)[-3:][::-1]
-            predictions = [
-                {
-                    'disease': model.classes_[i],
-                    'probability': f"{prediction_probas[i] * 100:.1f}%",
-                    'info': diseases_data.get(model.classes_[i], {})
-                }
-                for i in top_3_indices
-                if prediction_probas[i] > 0.05
-            ]
-            
-            return render_template(
-                'diagnosis.html',
-                predictions=predictions,
-                input_data=input_data
-            )
+        top_3_indices = np.argsort(prediction_probas)[-3:][::-1]
+        predictions = [
+            {
+                'disease': model.classes_[i],
+                'probability': f"{prediction_probas[i] * 100:.1f}%",
+                'info': diseases_data.get(model.classes_[i], {})
+            }
+            for i in top_3_indices
+            if prediction_probas[i] > 0.05
+        ]
+        
+        activity_logger.log_activity(
+            'guest',
+            'diagnose',
+            {
+                'input': input_data,
+                'prediction': predicted_class,
+                'probability': f"{max(prediction_probas) * 100:.1f}%"
+            }
+        )
+        
+        return render_template(
+            'diagnosis.html',
+            predictions=predictions,
+            input_data=input_data,
+            disease_info=diseases_data.get(predicted_class, {})
+        )
                              
-        except Exception as e:
-            logger.error(f"Prediction error: {str(e)}", exc_info=True)
-            raise CustomError('เกิดข้อผิดพลาดในการวินิจฉัย')
-            
-    except CustomError as e:
-        flash(e.message, 'error')
-        return redirect(url_for('home'))
     except Exception as e:
-        logger.error("Error in diagnose route", exc_info=True)
-        flash('เกิดข้อผิดพลาดในการวินิจฉัย', 'error')
-        return render_template('500.html', error=str(e)), 500
+        logger.error(f"Error in diagnosis: {str(e)}")
+        flash(str(e), 'error')
+        return redirect(url_for('home'))
 
 # Error Handlers
 @app.errorhandler(404)
@@ -619,27 +573,25 @@ def page_not_found(e):
 
 @app.errorhandler(500)
 def internal_server_error(e):
-    handle_error(e, "เกิดข้อผิดพลาดภายในเซิร์ฟเวอร์")
-    return render_template('500.html'), 500
-
-@app.errorhandler(CustomError)
-def handle_custom_error(error):
-    flash(error.message, 'error')
-    return redirect(request.referrer or url_for('home'))
-
-@app.errorhandler(Exception)
-def handle_all_exceptions(e):
-    logger.error("Unhandled Exception", exc_info=True)
     return render_template('500.html', error=str(e)), 500
 
-# เพิ่มตรงส่วน Error Handlers
 @app.errorhandler(413)
-def request_entity_too_large(error):
+def request_entity_too_large(e):
     flash('ไฟล์มีขนาดใหญ่เกินไป (ขนาดสูงสุด 100MB)', 'error')
-    return redirect(url_for('admin_dashboard'))
+    return redirect(request.referrer or url_for('admin_dashboard'))
+
+@app.errorhandler(CSRFError)
+def handle_csrf_error(e):
+    flash('การยืนยันความปลอดภัยล้มเหลว กรุณาลองใหม่อีกครั้ง', 'error')
+    return redirect(request.referrer or url_for('home'))
 
 if __name__ == '__main__':
-    # Initialize required files
+    # Initialize required files and folders
+    os.makedirs(Config.MODEL_FOLDER, exist_ok=True)
+    os.makedirs(Config.BACKUP_FOLDER, exist_ok=True)
+    os.makedirs(Config.LOG_FOLDER, exist_ok=True)
+    os.makedirs('static', exist_ok=True)
+    
     if not os.path.exists('diseases_data.json'):
         with open('diseases_data.json', 'w', encoding='utf-8') as f:
             json.dump({}, f, ensure_ascii=False, indent=4)
@@ -648,6 +600,7 @@ if __name__ == '__main__':
     model, label_encoders, feature_names = load_model()
     diseases_data = load_diseases_data()
     
+    # Setup logging
     logger.info("Starting application...")
     logger.info(f"Environment: {app.config['ENV']}")
     logger.info(f"Debug mode: {app.debug}")
@@ -656,6 +609,5 @@ if __name__ == '__main__':
     app.run(
         host=os.getenv('FLASK_HOST', '0.0.0.0'),
         port=int(os.getenv('FLASK_PORT', 5000)),
-        debug=app.debug,
-        ssl_context='adhoc' if app.env != 'development' else None
+        debug=app.debug
     )
